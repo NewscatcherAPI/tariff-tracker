@@ -155,9 +155,6 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
     return fig
 
 
-# Updated create_world_map function that leverages our existing standardization
-
-
 def create_world_map(
     events_df: pd.DataFrame, map_type: str = "imposing"
 ) -> Optional[go.Figure]:
@@ -174,85 +171,45 @@ def create_world_map(
     if events_df.empty:
         return None
 
-    # Print debug info to help diagnose issues
-    print(f"Map type: {map_type}")
-    print(f"DataFrame columns: {events_df.columns.tolist()}")
-    print(f"DataFrame shape: {events_df.shape}")
-
-    # Create a copy of the DataFrame to avoid modifying the original
-    df = events_df.copy()
-
-    # Initialize country_counts DataFrame
-    country_counts = None
-
-    # Prepare data based on map type
-    if map_type == "imposing":
-        # Count events by imposing country code if available
-        if "imposing_country_code" in df.columns:
-            # Make sure the column is not empty
-            valid_codes = df[
-                df["imposing_country_code"].notna()
-                & (df["imposing_country_code"] != "")
-            ]
-
-            if not valid_codes.empty:
-                print(
-                    f"Valid imposing country codes: {valid_codes['imposing_country_code'].unique().tolist()}"
-                )
-                country_counts = (
-                    valid_codes["imposing_country_code"].value_counts().reset_index()
-                )
-                country_counts.columns = ["country_code", "count"]
-                title = "Countries Imposing Tariffs"
-            else:
-                print("No valid imposing country codes found")
-        else:
-            print("No imposing_country_code column found")
-    else:  # targeted countries
-        # Process targeted country codes which can be in different formats
-        all_targeted_codes = []
-
-        if "targeted_country_codes" in df.columns:
-            # Explicitly convert each value and handle different formats
-            for i, row in df.iterrows():
-                codes = row.get("targeted_country_codes")
-
-                # Debug the value
-                print(f"Row {i}, targeted_country_codes: {codes}, type: {type(codes)}")
-
-                if isinstance(codes, list):
-                    all_targeted_codes.extend([c for c in codes if c])
-                elif isinstance(codes, str):
-                    if "," in codes:
-                        # Split comma-separated string
-                        all_targeted_codes.extend(
-                            [c.strip() for c in codes.split(",") if c.strip()]
-                        )
-                    else:
-                        # Single code
-                        all_targeted_codes.append(codes.strip())
-
-            print(f"Processed targeted country codes: {all_targeted_codes}")
-
-            if all_targeted_codes:
-                country_counts = (
-                    pd.Series(all_targeted_codes).value_counts().reset_index()
-                )
-                country_counts.columns = ["country_code", "count"]
-                title = "Countries Targeted by Tariffs"
-            else:
-                print("No valid targeted country codes found")
-        else:
-            print("No targeted_country_codes column found")
-
-    # If we couldn't get country codes, return None
-    if country_counts is None or country_counts.empty:
-        print("No country count data available for map")
+    # Target column based on map type
+    target_column = (
+        "imposing_country_code" if map_type == "imposing" else "targeted_country_codes"
+    )
+    if target_column not in events_df.columns:
         return None
 
-    print(f"Original country counts: {country_counts.to_dict('records')}")
+    # Prepare data for the map
+    country_codes = []
 
-    # Special handling for EU - represent as member countries
+    # Process country codes
+    if map_type == "imposing":
+        # For imposing countries, just extract the codes
+        country_codes = events_df[target_column].dropna().tolist()
+    else:
+        # For targeted countries, need to handle comma-separated strings
+        for codes in events_df[target_column].dropna():
+            if isinstance(codes, str):
+                # Split comma-separated string
+                parts = [part.strip() for part in codes.split(",")]
+                country_codes.extend(parts)
+            elif isinstance(codes, list):
+                # Already a list
+                country_codes.extend(codes)
+
+    if not country_codes:
+        return None
+
+    # Count frequencies
+    from collections import Counter
+
+    code_counts = Counter(country_codes)
+
+    # Convert to DataFrame
+    map_data = pd.DataFrame(
+        {"country_code": list(code_counts.keys()), "count": list(code_counts.values())}
+    )
+
+    # Handle EU by expanding to member states
     eu_countries = [
         "AT",
         "BE",
@@ -283,58 +240,63 @@ def create_world_map(
         "SE",
     ]
 
-    # Handle the EU special case
-    expanded_data = []
-    for _, row in country_counts.iterrows():
-        code = row["country_code"]
-        count = row["count"]
+    # Check if EU is in the data
+    if "EU" in map_data["country_code"].values:
+        eu_count = map_data.loc[map_data["country_code"] == "EU", "count"].iloc[0]
 
-        if code == "EU":
-            # Add each EU country with the same count
-            for eu_code in eu_countries:
-                expanded_data.append({"country_code": eu_code, "count": count})
-        else:
-            expanded_data.append({"country_code": code, "count": count})
+        # Remove EU
+        map_data = map_data[map_data["country_code"] != "EU"]
 
-    # Convert expanded data to DataFrame
-    if expanded_data:
-        country_counts = pd.DataFrame(expanded_data)
+        # Add EU member states
+        for country in eu_countries:
+            # If country already exists, add to its count
+            if country in map_data["country_code"].values:
+                idx = map_data[map_data["country_code"] == country].index[0]
+                map_data.at[idx, "count"] += eu_count
+            else:
+                # Add new row
+                map_data = pd.concat(
+                    [
+                        map_data,
+                        pd.DataFrame({"country_code": [country], "count": [eu_count]}),
+                    ]
+                )
 
-        # Aggregate if there are duplicates
-        country_counts = (
-            country_counts.groupby("country_code")["count"].sum().reset_index()
-        )
-
-    # Print final data for debugging
-    print(f"Final map data: {country_counts.to_dict('records')}")
-
-    # Create choropleth map with Plotly Express
-    fig = px.choropleth(
-        country_counts,
-        locations="country_code",
-        color="count",
-        hover_name="country_code",
-        color_continuous_scale=px.colors.sequential.Blues,
-        labels={"count": "Number of Events"},
-        title=title,
+    # Create the map
+    title = (
+        "Countries Imposing Tariffs"
+        if map_type == "imposing"
+        else "Countries Targeted by Tariffs"
     )
 
-    # Customize layout
+    fig = go.Figure(
+        data=go.Choropleth(
+            locations=map_data["country_code"],
+            z=map_data["count"],
+            locationmode="ISO-3",
+            colorscale="Blues",
+            marker_line_color="white",
+            marker_line_width=0.5,
+            colorbar_title="Event Count",
+        )
+    )
+
     fig.update_layout(
-        height=600,
-        coloraxis_colorbar=dict(title="Event Count"),
+        title_text=title,
         geo=dict(
             showframe=False,
             showcoastlines=True,
             projection_type="natural earth",
-            showcountries=True,
-            countrycolor="lightgray",
-            coastlinecolor="lightgray",
-            # Make sure the map is centered properly
-            center=dict(lon=0, lat=20),
-            # Set an appropriate zoom level
-            projection_scale=1.2,
+            showland=True,
+            landcolor="lightgray",
+            countrycolor="white",
+            coastlinecolor="white",
+            lakecolor="white",
+            showocean=True,
+            oceancolor="aliceblue",
         ),
+        height=600,
+        margin=dict(l=0, r=0, t=30, b=0),
     )
 
     return fig
