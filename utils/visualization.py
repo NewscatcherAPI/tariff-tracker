@@ -176,34 +176,95 @@ def create_world_map(
 
     # Prepare data based on map type
     if map_type == "imposing":
-        # Count events by imposing country
-        country_counts = df["imposing_country_code"].value_counts().reset_index()
-        country_counts.columns = ["country_code", "count"]
-        title = "Countries Imposing Tariffs"
-    else:
-        # Count events by targeted country
-        # This is more complex because targeted_country_codes is a list or comma-separated string
-        targeted_countries = []
-        for _, row in df.iterrows():
-            countries = row["targeted_country_codes"]
-            if isinstance(countries, str):
-                countries = [c.strip() for c in countries.split(",")]
-            elif isinstance(countries, list):
-                pass
-            else:
-                continue
+        # Focus on country codes which work better with choropleth maps
+        if "imposing_country_code" in df.columns:
+            # Count events by imposing country code
+            country_counts = df["imposing_country_code"].value_counts().reset_index()
+            country_counts.columns = ["country_code", "count"]
+            title = "Countries Imposing Tariffs"
+        else:
+            return None
+    else:  # targeted countries
+        # This is more complex because targeted_country_codes can be a list or string
+        if "targeted_country_codes" not in df.columns:
+            return None
 
-            for country in countries:
-                targeted_countries.append(country)
+        # Process the targeted country codes
+        all_targeted_codes = []
 
-        country_counts = pd.Series(targeted_countries).value_counts().reset_index()
+        for codes in df["targeted_country_codes"]:
+            if isinstance(codes, list):
+                all_targeted_codes.extend(codes)
+            elif isinstance(codes, str):
+                # If it's a comma-separated string, split it
+                all_targeted_codes.extend([code.strip() for code in codes.split(",")])
+
+        # If no targeted countries found
+        if not all_targeted_codes:
+            return None
+
+        # Count occurrences of each country code
+        country_counts = pd.Series(all_targeted_codes).value_counts().reset_index()
         country_counts.columns = ["country_code", "count"]
         title = "Countries Targeted by Tariffs"
 
     if country_counts.empty:
         return None
 
-    # Create choropleth map
+    # Special handling for EU - represent as member countries
+    # First, save a copy of the original data
+    original_counts = country_counts.copy()
+
+    # Create new dataframe with expanded EU countries if needed
+    expanded_data = []
+    eu_countries = [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CY",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE",
+    ]
+
+    for _, row in original_counts.iterrows():
+        if row["country_code"] == "EU":
+            # Add each EU country with the same count
+            for country in eu_countries:
+                expanded_data.append({"country_code": country, "count": row["count"]})
+        else:
+            expanded_data.append(row.to_dict())
+
+    # Convert back to DataFrame
+    if expanded_data:
+        country_counts = pd.DataFrame(expanded_data)
+
+        # Aggregate if there are duplicates after expansion
+        country_counts = (
+            country_counts.groupby("country_code")["count"].sum().reset_index()
+        )
+
+    # Create choropleth map with Plotly Express
     fig = px.choropleth(
         country_counts,
         locations="country_code",
@@ -218,7 +279,18 @@ def create_world_map(
     fig.update_layout(
         height=600,
         coloraxis_colorbar=dict(title="Event Count"),
-        geo=dict(showframe=False, showcoastlines=True, projection_type="natural earth"),
+        geo=dict(
+            showframe=False,
+            showcoastlines=True,
+            projection_type="natural earth",
+            showcountries=True,
+            countrycolor="lightgray",
+            coastlinecolor="lightgray",
+            # Make sure the map is centered properly
+            center=dict(lon=0, lat=20),
+            # Set an appropriate zoom level
+            projection_scale=1.2,
+        ),
     )
 
     return fig
