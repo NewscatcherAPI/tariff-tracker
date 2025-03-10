@@ -131,6 +131,10 @@ def clean_article_data(articles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return cleaned_articles
 
 
+# This is the change needed for utils/data_processing.py
+# Update the events_to_dataframe function to handle lists of dictionaries
+
+
 def events_to_dataframe(events: List[Dict[str, Any]]) -> pd.DataFrame:
     """
     Convert a list of event dictionaries to a pandas DataFrame.
@@ -154,7 +158,20 @@ def events_to_dataframe(events: List[Dict[str, Any]]) -> pd.DataFrame:
     for col in df.columns:
         if df[col].apply(lambda x: isinstance(x, list)).any():
             df[col] = df[col].apply(
-                lambda x: ", ".join(x) if isinstance(x, list) else x
+                lambda x: (
+                    ", ".join(
+                        [
+                            (
+                                str(item)
+                                if not isinstance(item, dict)
+                                else str(item.get("name", str(item)))
+                            )
+                            for item in x
+                        ]
+                    )
+                    if isinstance(x, list)
+                    else x
+                )
             )
 
     return df
