@@ -50,3 +50,4 @@ Thumbs.db
 *.xlsx
 *.json
 !data/sample_tariff_events.json
+!data/country_codes_iso_3166.csv
