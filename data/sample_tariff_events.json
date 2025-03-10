@@ -1,0 +1,1662 @@
+{
+    "message": "Success",
+    "count": 30,
+    "events": [
+        {
+            "id": "gllqcJUBvyT_ytpRAmZP",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "b010b9b1f91cb775a34b4e071c26d418"
+            ],
+            "extraction_date": "2025-03-07 17:12:30",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States threatened to impose 25% tariffs on all steel and aluminum imports from all countries as part of a broader aggressive trade policy shift towards protectionism.",
+                "affected_products": [
+                    "steel",
+                    "aluminum"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/01",
+                "tariff_rates": [
+                    "25% on aluminum",
+                    "25% on steel"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://todayheadline.co/the-new-age-of-global-trade-aggressive-neo-mercantilism",
+                    "id": "b010b9b1f91cb775a34b4e071c26d418",
+                    "media": "https://i0.wp.com/todayheadline.co/wp-content/uploads/2025/03/Aggressive-Neo-Mercantilism-%E2%80%93-The-Diplomat.jpg?fit=600%2C401&ssl=1",
+                    "title": "Aggressive Neo-Mercantilism"
+                }
+            ]
+        },
+        {
+            "id": "f1lpcJUBvyT_ytpR_WZA",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "019dfcfe725198ea18af62679dec5fd5",
+                "2841689ea4a75186ba28c63c360d2fc5"
+            ],
+            "extraction_date": "2025-03-07 17:12:29",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "US President Donald Trump proposed a 25% tariff on Canadian goods as part of a broader discussion about Canada potentially becoming the '51st state' of the United States. This proposal is part of Trump's comments on merging Canada with the US, suggesting benefits such as no tariffs, lower taxes, and increased security. The tariff would affect various Canadian goods, impacting industries like materials and consumer staples.",
+                "affected_products": [
+                    "goods"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "25% on Canadian goods"
+                ],
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "policy_objective": "national security",
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "relevance_score": "Medium",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.southcoastregister.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "019dfcfe725198ea18af62679dec5fd5",
+                    "media": "https://www.southcoastregister.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                },
+                {
+                    "link": "https://www.moreechampion.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "2841689ea4a75186ba28c63c360d2fc5",
+                    "media": "https://www.moreechampion.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                }
+            ]
+        },
+        {
+            "id": "gFlpcJUBvyT_ytpR_2ZJ",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "6c6a3a5e2d151125150de777d178668f"
+            ],
+            "extraction_date": "2025-03-07 17:12:29",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "Starting April 1, 2025, Moldova will export fruits such as grapes, apples, plums, and cherries to EFTA countries (Switzerland, Norway, Iceland, Liechtenstein) duty-free or with reduced tariffs, under the Free Trade Agreement signed in June 2023. This agreement aims to expand Moldova's trade partnerships and attract new investments.",
+                "affected_products": [
+                    "cherries",
+                    "grapes",
+                    "plums",
+                    "apples"
+                ],
+                "imposing_country_name": "Moldova",
+                "affected_industries": [
+                    "Consumer Staples"
+                ],
+                "main_tariff_rate": 0,
+                "announcement_date": "2023/06",
+                "legal_basis": "Free Trade Agreement with EFTA",
+                "tariff_rates": [
+                    "0% on grapes",
+                    "0% on apples",
+                    "0% on plums",
+                    "0% on cherries"
+                ],
+                "targeted_country_codes": [
+                    "LI",
+                    "CH",
+                    "NO",
+                    "IS"
+                ],
+                "policy_objective": "expand trade partnerships",
+                "hs_product_categories": [
+                    "II: Vegetable products"
+                ],
+                "targeted_country_names": [
+                    "Switzerland",
+                    "Liechtenstein",
+                    "Iceland",
+                    "Norway"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff reduction",
+                "imposing_country_code": "MD",
+                "implementation_date": "2025/04/01"
+            },
+            "articles": [
+                {
+                    "link": "https://www.freshplaza.com/north-america/article/9710100/moldova-to-export-fruits-duty-free-to-efta-countries",
+                    "id": "6c6a3a5e2d151125150de777d178668f",
+                    "media": "https://www.freshplaza.com/remote/https/agfstorage.blob.core.windows.net/misc/StockPhotos/Various/FruitVarious_FP_img_0348.jpg?preset=OgImage",
+                    "title": "Moldova to export fruits duty-free to EFTA countries"
+                }
+            ]
+        },
+        {
+            "id": "gVlqcJUBvyT_ytpRAGbr",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "140b727eeb396b096979411aff7a7c40"
+            ],
+            "extraction_date": "2025-03-07 17:12:29",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In February 2025, U.S. President Donald Trump announced new tariffs targeting Canada, Mexico, China, and the European Union. These tariffs are part of a broader strategy to match tax rates other countries charge on U.S. imports, contributing to macroeconomic uncertainty. The tariffs are expected to disrupt global supply chains, leading to inflation and increased recessionary risks. Affected industries include materials, industrials, consumer discretionary, and consumer staples, with specific impacts on products like live animals, vegetable products, prepared foodstuffs, base metals, machinery, and vehicles. The geopolitical and economic tensions are driving investors towards gold as a safe haven.",
+                "measure_type": "new tariff",
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Industrials",
+                    "Materials"
+                ],
+                "main_tariff_rate": 0,
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "MX",
+                    "EU",
+                    "CA",
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "I: Live animals; animal products",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico",
+                    "China",
+                    "European Union"
+                ],
+                "imposing_country_code": "US",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://stockhouse.com/news/newswire/2025/03/03/a-data-driven-case-for-investing-gold-2025",
+                    "id": "140b727eeb396b096979411aff7a7c40",
+                    "media": "https://media.stockhouse.com/embed/a9qypyzhq93v9btu9wdjibgwf3/1/large",
+                    "title": "A data-driven case for investing in gold in 2025"
+                }
+            ]
+        },
+        {
+            "id": "e1lpcJUBvyT_ytpR-mYH",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "6fb7db30ba20bcc47a596daac55a017d"
+            ],
+            "extraction_date": "2025-03-07 17:12:28",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In February 2025, US President Donald Trump announced new tariffs targeting key trading partners including Canada, Mexico, and China. The tariffs specifically impose a 25% rate on steel and a 10% rate on aluminum imports. This move is part of a broader strategy that includes a worldwide reciprocal tariff plan, raising concerns about a potential global trade war and its impact on struggling economies.",
+                "affected_products": [
+                    "steel",
+                    "aluminum"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on aluminum",
+                    "25% on steel"
+                ],
+                "targeted_country_codes": [
+                    "MX",
+                    "CA",
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico",
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://vir.com.vn/us-tariff-policies-causing-concern-in-vietnam-123746.html",
+                    "id": "6fb7db30ba20bcc47a596daac55a017d",
+                    "media": "https://vir.com.vn/stores/news_dataimages/2025/032025/01/22/croped/in-2024-south-korea-was-the-second-largest-investor-in-vietnam-after-singapore-with-nearly-706-billion-in-investment-source-foreign-investment-agency-ministry-of-planning-and-investment-20250301221018.png?randTime=1741000187",
+                    "title": "US tariff policies causing concern in Vietnam"
+                }
+            ]
+        },
+        {
+            "id": "fFlpcJUBvyT_ytpR-2ZD",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "8abba4e49f847684ef11600c61b1a2d6"
+            ],
+            "extraction_date": "2025-03-07 17:12:28",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "President Donald Trump announced the re-imposition of tariffs on Mexico and Canada, set to take effect in early March 2025. These tariffs are expected to impact the American auto industry, which relies on long product cycles and significant investments in technology and new products. The tariffs could have significant economic implications for automakers and consumers in the United States.",
+                "measure_type": "new tariff",
+                "affected_products": [
+                    "automobiles"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary"
+                ],
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "MX",
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico"
+                ],
+                "imposing_country_code": "US",
+                "implementation_date": "2025/03",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://article.wn.com/view/2025/03/03/The_auto_industry_with_5year_product_cycles_cant_pivot_on_a_",
+                    "id": "8abba4e49f847684ef11600c61b1a2d6",
+                    "media": "https://ecdn0.wn.com/st/favicon-20131209.ico",
+                    "title": "The auto industry, with 5-year product cycles, can't pivot on a dime to adapt to tariffs"
+                }
+            ]
+        },
+        {
+            "id": "fVlpcJUBvyT_ytpR-2ay",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "f8ef50f9143478f4b3588f8ce430c399"
+            ],
+            "extraction_date": "2025-03-07 17:12:28",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "U.S. President Donald Trump has threatened to impose a 10% tariff on the 4 million barrels per day of Canadian crude oil imported into the U.S. This potential tariff has already caused a slowdown in Canada's oilfield drilling and services sector, with fears that it could stall the industry's expected rebound. The uncertainty surrounding the tariff has led to reduced forecasts for Canadian rig counts and downgrades of Canadian drilling stocks. There is also concern about possible retaliatory tariffs by Canada, which could affect inputs like sand used in fracking.",
+                "affected_products": [
+                    "crude oil"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Energy"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on crude oil"
+                ],
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "policy_objective": "protect domestic industry",
+                "hs_product_categories": [
+                    "V: Mineral products"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.marketscreener.com/quote/stock/PRECISION-DRILLING-CORPOR-1411197/news/Trump-s-tariffs-threat-hits-Canada-s-oil-and-gas-drillers-49215961",
+                    "id": "f8ef50f9143478f4b3588f8ce430c399",
+                    "media": "https://www.marketscreener.com/images/twitter_MS_fdblanc.png",
+                    "title": "Trump's tariffs threat hits Canada's oil and gas drillers"
+                }
+            ]
+        },
+        {
+            "id": "fllpcJUBvyT_ytpR_GYa",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "ed62c76c7f7c06e6f9ca758c40071438"
+            ],
+            "extraction_date": "2025-03-07 17:12:28",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States has increased tariffs on Chinese electric vehicles to 100% as of September 2024, under the Biden administration. This measure is part of a broader strategy to counter the perceived threat from Chinese EVs, which have captured a significant share of the global market. The tariffs are expected to impact the cost and competitiveness of Chinese EVs in the U.S. market.",
+                "affected_products": [
+                    "electric vehicles"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary"
+                ],
+                "main_tariff_rate": 100,
+                "announcement_date": "2024/09",
+                "tariff_rates": [
+                    "100% on electric vehicles"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "previous_tariff_rate": "100% on electric vehicles",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://english.ckgsb.edu.cn/knowledge/article/chinese-evs-reshape-global-auto-industry-amid-tariffs",
+                    "id": "ed62c76c7f7c06e6f9ca758c40071438",
+                    "media": "https://english.ckgsb.edu.cn/knowledge/wp-content/uploads/2025/02/The-Great-EV-Trade-War_How-New-Tariffs-Will-Reshape-the-Global-Auto-Industry.jpg",
+                    "title": "Chinese EVs Reshape Global Auto Industry Amid Tariffs"
+                }
+            ]
+        },
+        {
+            "id": "eVlpcJUBvyT_ytpR-GZv",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "e9bc44809663ba1b927800820413c38d"
+            ],
+            "extraction_date": "2025-03-07 17:12:27",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In December 2024, Mexico announced a 19% tariff on all products imported from countries without a trade agreement, including China. This measure, implemented in January 2025, aims to protect the local textile industry from the impact of Chinese fast fashion. The tariff affects e-commerce platforms like Shein, Temu, and Alibaba, which have been selling inexpensive goods in Mexico. The policy is expected to encourage local manufacturing and address the loss of jobs in the textile sector. However, it also impacts millions of informal resellers who rely on these platforms for their livelihoods.",
+                "affected_products": [
+                    "clothing",
+                    "accessories"
+                ],
+                "imposing_country_name": "Mexico",
+                "affected_industries": [
+                    "Consumer Discretionary"
+                ],
+                "main_tariff_rate": 19,
+                "announcement_date": "2024/12",
+                "tariff_rates": [
+                    "19% on all products from countries without a trade agreement"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "policy_objective": "protect domestic industry",
+                "hs_product_categories": [
+                    "XI: Textiles and textile articles"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "MX",
+                "implementation_date": "2025/01",
+                "estimated_trade_value": "$4.5 billion"
+            },
+            "articles": [
+                {
+                    "link": "https://restofworld.org/2025/mexico-new-import-tax-shein-temu-resellers",
+                    "id": "e9bc44809663ba1b927800820413c38d",
+                    "media": "https://149346090.v2.pressablecdn.com/wp-content/uploads/2025/02/1_SHEIN-MX-SE-041-1600x900.jpg",
+                    "title": "Mexico's new tariffs hit Shein — and millions of local resellers"
+                }
+            ]
+        },
+        {
+            "id": "d1lpcJUBvyT_ytpR8Wbv",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "125c0359d72a5c3c4e820efd2686ae83"
+            ],
+            "extraction_date": "2025-03-07 17:12:26",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States announced an increase in tariffs from 10% to 20% on Chinese imports in February 2025, closing a loophole for smaller imports. This move is part of ongoing trade tensions between the US and China, with potential impacts on US agricultural imports. China is considering both tariff and non-tariff measures in response.",
+                "affected_products": [
+                    "agricultural products"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples"
+                ],
+                "main_tariff_rate": 20,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "20% on Chinese imports"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "I: Live animals; animal products",
+                    "II: Vegetable products",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "previous_tariff_rate": "10% on Chinese imports",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.devdiscourse.com/article/business/3283387-tariff-tensions-chinas-manufacturing-surge-amidst-us-trade-spat",
+                    "id": "125c0359d72a5c3c4e820efd2686ae83",
+                    "media": "https://www.devdiscourse.com/remote.axd?https://devdiscourse.blob.core.windows.net/imagegallery/29_02_2020_19_14_39_2122985.jpg?width=920&format=jpeg",
+                    "title": "Tariff Tensions: China's Manufacturing Surge Amidst US Trade Spat"
+                }
+            ]
+        },
+        {
+            "id": "eFlpcJUBvyT_ytpR9GYJ",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "faca866bf34af809dd13c0ca31c2bb6a"
+            ],
+            "extraction_date": "2025-03-07 17:12:26",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States, under President Donald Trump, imposed a new tariff of 10% on imports from China, affecting various farm exports. This has led to a rush among importers to beat the tariff deadline. In response, China is considering retaliatory measures to protect its interests.",
+                "affected_products": [
+                    "farm exports"
+                ],
+                "imposing_country_name": "United States of America",
+                "affected_industries": [
+                    "Consumer Staples"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on imports from China"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "I: Live animals; animal products",
+                    "II: Vegetable products",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://article.wn.com/view/2025/03/03/China_eyeing_US_farm_exports_for_retaliation_report_says_as__2m",
+                    "id": "faca866bf34af809dd13c0ca31c2bb6a",
+                    "media": "https://ecdn0.wn.com/st/favicon-20131209.ico",
+                    "title": "China eyeing U.S. farm exports for retaliation, report says, as importers rush to beat tariffs"
+                }
+            ]
+        },
+        {
+            "id": "dFlpcJUBvyT_ytpR7mbX",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "88fee09d4e039d431001e8c9b638f38e"
+            ],
+            "extraction_date": "2025-03-07 17:12:25",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In response to US tariffs, China announced export controls on rare minerals including tungsten, gallium, germanium, and graphite, which are critical for aerospace, defense, electronics, automotive, and energy sectors. This measure is part of China's broader strategy to counter US trade actions.",
+                "measure_type": "other trade restriction",
+                "affected_products": [
+                    "germanium",
+                    "graphite",
+                    "tungsten",
+                    "gallium"
+                ],
+                "imposing_country_name": "China",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Information Technology",
+                    "Industrials",
+                    "Energy",
+                    "Materials"
+                ],
+                "announcement_date": "2025/01",
+                "targeted_country_codes": [
+                    "US"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "United States"
+                ],
+                "imposing_country_code": "CN",
+                "implementation_date": "2025/01",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://www.financialexpress.com/business/us-china-trade-war-all-you-want-to-know-and-its-impact-on-india-3765283",
+                    "id": "88fee09d4e039d431001e8c9b638f38e",
+                    "media": "https://www.financialexpress.com/wp-content/uploads/2025/02/uschina.reuters.jpg",
+                    "title": "US-China Trade War: All you want to know and it's impact on India"
+                }
+            ]
+        },
+        {
+            "id": "dVlpcJUBvyT_ytpR72Yu",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "c334525d0f7ab1508336e42501a5edb8",
+                "de348ea4995885314fdd18391f9c25a5"
+            ],
+            "extraction_date": "2025-03-07 17:12:25",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "US President Donald Trump proposed a 25% tariff on Canadian goods, suggesting that if Canada merged with the US, tariffs would be eliminated, taxes reduced, and security enhanced. This proposal is part of a broader discussion about Canada potentially becoming the '51st state' of the US. The tariff is intended to address national security concerns, particularly regarding threats from Russian and Chinese ships.",
+                "affected_products": [
+                    "Canadian goods",
+                    "goods"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "25% on Canadian goods"
+                ],
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "policy_objective": "national security",
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "relevance_score": "Medium",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.newcastleherald.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "c334525d0f7ab1508336e42501a5edb8",
+                    "media": "https://www.newcastleherald.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                },
+                {
+                    "link": "https://www.cessnockadvertiser.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "de348ea4995885314fdd18391f9c25a5",
+                    "media": "https://www.cessnockadvertiser.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                }
+            ]
+        },
+        {
+            "id": "dllpcJUBvyT_ytpR8WY9",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "f65e5799caffc33407a9f589add910cd"
+            ],
+            "extraction_date": "2025-03-07 17:12:25",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States is set to implement new tariffs on Mexico, Canada, and China starting March 1, 2025. These tariffs are part of President Trump's aggressive trade policy, which has raised inflationary concerns and market volatility. The tariffs are expected to affect industries such as materials and consumer discretionary, with specific impacts on base metals and vehicles. The announcement has led to fears of potential retaliatory measures from the targeted countries.",
+                "measure_type": "new tariff",
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Materials"
+                ],
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "MX",
+                    "CA",
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico",
+                    "China"
+                ],
+                "imposing_country_code": "US",
+                "implementation_date": "2025/03/01",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://www.ii.co.uk/analysis-commentary/market-snapshot-uk-turns-defence-attack-ii534530",
+                    "id": "f65e5799caffc33407a9f589add910cd",
+                    "media": "https://media-prod.ii.co.uk/s3fs-public/styles/rich_media_image_large/public/2024-12/green_0.jpg",
+                    "title": "Market snapshot: UK turns defence into attack"
+                }
+            ]
+        },
+        {
+            "id": "ellpcJUBvyT_ytpR-Gbo",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "ba6b6b6e4531d3e8c1ae268fd8de22dd"
+            ],
+            "extraction_date": "2025-03-07 17:12:25",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States, under President Trump, is threatening to impose new tariffs of up to 25% on goods imported from Canada and Mexico. This measure targets the automobile industry, affecting products such as automobiles, engines, and transmissions. The tariffs are expected to significantly increase costs for automakers like Nissan and Stellantis, who rely heavily on manufacturing in Mexico and Canada. The potential tariffs could add $1,000 to $4,000 to the price of a new vehicle, with broader economic impacts including job cuts and production shifts. Automakers are considering various strategies to mitigate the impact, including shifting production to other countries.",
+                "affected_products": [
+                    "automobiles",
+                    "engines",
+                    "transmissions"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "25% on automobiles",
+                    "25% on engines",
+                    "25% on transmissions"
+                ],
+                "targeted_country_codes": [
+                    "MX",
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://dnyuz.com/2025/03/03/2-troubled-carmakers-nissan-and-stellantis-could-be-hit-hardest-by-tariffs",
+                    "id": "ba6b6b6e4531d3e8c1ae268fd8de22dd",
+                    "media": "https://dnyuz.com/wp-content/uploads/2025/03/2-Troubled-Carmakers-Nissan-and-Stellantis-Could-Be-Hit-Hardest.jpg",
+                    "title": "2 Troubled Carmakers, Nissan and Stellantis, Could Be Hit Hardest by Tariffs"
+                }
+            ]
+        },
+        {
+            "id": "c1lpcJUBvyT_ytpR7Gb2",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "88099b183958854af1564e54e55cf90b",
+                "09c0651c79de7fb2a5772cacfe8dce27",
+                "51f9ef8454c76d40736a47d2dc3d8672"
+            ],
+            "extraction_date": "2025-03-07 17:12:24",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "US President Donald Trump proposed a 25% tariff on Canadian goods as part of a broader discussion about Canada potentially becoming the '51st state' of the United States. This proposal is part of Trump's comments on the benefits of merging the two countries, including eliminating tariffs and reducing taxes. The proposed tariff targets a wide range of Canadian goods, affecting industries such as materials, consumer discretionary, and consumer staples.",
+                "affected_products": [
+                    "Canadian goods",
+                    "goods"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "25% on Canadian goods"
+                ],
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "policy_objective": "national security",
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "relevance_score": "Medium",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.examiner.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "88099b183958854af1564e54e55cf90b",
+                    "media": "https://www.examiner.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                },
+                {
+                    "link": "https://www.standard.net.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "09c0651c79de7fb2a5772cacfe8dce27",
+                    "media": "https://www.standard.net.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                },
+                {
+                    "link": "https://www.northweststar.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "51f9ef8454c76d40736a47d2dc3d8672",
+                    "media": "https://www.northweststar.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                }
+            ]
+        },
+        {
+            "id": "cVlpcJUBvyT_ytpR52b5",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "84824fcf29bfc86c0548df9bdff15d08"
+            ],
+            "extraction_date": "2025-03-07 17:12:23",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In July 2024, Nigeria's electricity Distribution companies announced a 250% increase in electricity tariffs for 'band A' customers. The move was met with public anger and criticism from the Nigeria Labour Congress (NLC), but the tariff was implemented despite protests.",
+                "affected_products": [
+                    "electricity"
+                ],
+                "imposing_country_name": "Nigeria",
+                "affected_industries": [
+                    "Utilities"
+                ],
+                "main_tariff_rate": 250,
+                "announcement_date": "2024/07",
+                "tariff_rates": [
+                    "250% on electricity"
+                ],
+                "targeted_country_codes": [
+                    "NG"
+                ],
+                "hs_product_categories": [
+                    "XXI: Works of art, collectors' pieces"
+                ],
+                "targeted_country_names": [
+                    "Nigeria"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "imposing_country_code": "NG",
+                "implementation_date": "2024/07"
+            },
+            "articles": [
+                {
+                    "link": "https://sundiatapost.com/electricity-telecom-multichoice-tariff-hike-nigerians-knock-nlc",
+                    "id": "84824fcf29bfc86c0548df9bdff15d08",
+                    "media": "https://i0.wp.com/sundiatapost.com/wp-content/uploads/2025/03/tekecom.jpg?fit=1200%2C720&ssl=1",
+                    "title": "Electricity, telecom, Multichoice tariff hike: Nigerians knock NLC"
+                }
+            ]
+        },
+        {
+            "id": "cllpcJUBvyT_ytpR6GbB",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "2f818216f6049dad88b2ed109fde108b"
+            ],
+            "extraction_date": "2025-03-07 17:12:23",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "US President Donald Trump proposed a 25% tariff on Canadian goods as part of a broader discussion about Canada potentially becoming the '51st state' of the United States. This proposal is part of Trump's comments on merging Canada with the US, suggesting benefits such as no tariffs, lower taxes, and increased security. The tariff would affect various Canadian goods, impacting industries like materials and consumer staples. The announcement has sparked reactions emphasizing Canadian resilience.",
+                "affected_products": [
+                    "goods"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Staples",
+                    "Materials"
+                ],
+                "main_tariff_rate": 25,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "25% on Canadian goods"
+                ],
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "XV: Base metals and articles of base metal",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "relevance_score": "Medium",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.singletonargus.com.au/story/8907186/mike-myers-makes-swipe-at-trumps-51st-state-claims",
+                    "id": "2f818216f6049dad88b2ed109fde108b",
+                    "media": "https://www.singletonargus.com.au/images/transform/v1/crop/frm/silverstone-feed-data/c2e0da77-d168-418a-b0fe-25289fab4fc2.jpg/r0_90_800_510_w1200_h630_fmax.jpg",
+                    "title": "Mike Myers makes swipe at Trump's '51st state' claims"
+                }
+            ]
+        },
+        {
+            "id": "bllpcJUBvyT_ytpR4Wb3",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "7473d9bdaae78a928665ecf30b5f3e2a"
+            ],
+            "extraction_date": "2025-03-07 17:12:22",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States has imposed retaliatory tariffs on India, specifically targeting the pharma sector with a 33% tariff on oncology products. This measure is part of reciprocal tariffs affecting the sector, and it has led to significant declines in stock prices for Indian pharma companies. The tariffs are expected to impact the US economy by weakening consumer sentiments and potentially escalating recession risks. The announcement was made in February 2025, and the tariffs are part of ongoing trade tensions between the two countries.",
+                "affected_products": [
+                    "oncology products"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Health Care"
+                ],
+                "main_tariff_rate": 33,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "33% on oncology products"
+                ],
+                "targeted_country_codes": [
+                    "IN"
+                ],
+                "hs_product_categories": [
+                    "VI: Products of the chemical or allied industries"
+                ],
+                "targeted_country_names": [
+                    "India"
+                ],
+                "trigger_event": "Reciprocal tariffs affecting the pharma sector",
+                "relevance_score": "High",
+                "measure_type": "retaliatory tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://economictimes.indiatimes.com/markets/stocks/news/up-to-33-monthly-fall-battered-bruised-it-auto-pharma-stocks-have-a-trump-hand/articleshow/118675769.cms",
+                    "id": "7473d9bdaae78a928665ecf30b5f3e2a",
+                    "media": "https://img.etimg.com/thumb/msid-118675823,width-1200,height-630,imgsize-6228,overlay-etmarkets/articleshow.jpg",
+                    "title": "Up to 33% monthly fall, battered & bruised IT, auto, pharma stocks have a Trump hand"
+                }
+            ]
+        },
+        {
+            "id": "b1lpcJUBvyT_ytpR42bw",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "b8cd3ba7f3379076ee59270b0ea88575"
+            ],
+            "extraction_date": "2025-03-07 17:12:22",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States, under President Trump, has announced a series of new tariffs targeting Canada and Mexico as part of a 'reciprocal tariffs' strategy. A 25% tariff will be imposed on all Canadian and Mexican imports starting March 4, with a reduced 10% duty on oil and gas. Additionally, a 25% tariff on global steel and aluminum, including Canadian products, will be implemented on March 12. Further tariffs include a 25% tariff on global auto imports, potentially escalating to 75% on Canadian cars by April 2. These measures are part of a broader strategy to address perceived unfair trade practices.",
+                "affected_products": [
+                    "automobiles",
+                    "semiconductors",
+                    "oil",
+                    "steel",
+                    "lumber",
+                    "gas",
+                    "aluminum",
+                    "dairy",
+                    "pharmaceuticals"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Staples",
+                    "Consumer Discretionary",
+                    "Industrials",
+                    "Energy",
+                    "Materials"
+                ],
+                "main_tariff_rate": 75,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "75% on Canadian cars",
+                    "10% on oil and gas",
+                    "25% on all Canadian and Mexican imports",
+                    "25% on global steel and aluminum",
+                    "25% on global auto imports"
+                ],
+                "targeted_country_codes": [
+                    "MX",
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal",
+                    "V: Mineral products"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US",
+                "implementation_date": "2025/03/04"
+            },
+            "articles": [
+                {
+                    "link": "https://weeklyvoice.com/trump-reaffirms-canada-tariff-threat-as-u-k-sidesteps-support",
+                    "id": "b8cd3ba7f3379076ee59270b0ea88575",
+                    "media": "https://weeklyvoice.com/wp-content/uploads/2023/09/jpn_oglajou-7.jpg",
+                    "title": "Trump Reaffirms Canada Tariff Threat as U.K. Sidesteps Support"
+                }
+            ]
+        },
+        {
+            "id": "cFlpcJUBvyT_ytpR5Gb_",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "2f39be6b5b254c7e31a33f504f97f57a"
+            ],
+            "extraction_date": "2025-03-07 17:12:22",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In early February 2025, US President Donald Trump announced a new 10% tariff on various goods imported from China. This measure targets a wide range of industries, including materials, industrials, consumer discretionary, and consumer staples. The State Administration of Foreign Exchange in China conducted a survey among exporters and importers to assess the impact of these tariffs and China's retaliatory measures. The survey aimed to understand how companies plan to respond to the new levies.",
+                "affected_products": [
+                    "various goods"
+                ],
+                "imposing_country_name": "United States of America",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Industrials",
+                    "Materials"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on various goods"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.bloomberg.com/news/articles/2025-03-03/china-fx-regulator-surveys-companies-on-impact-of-trump-tariffs",
+                    "id": "2f39be6b5b254c7e31a33f504f97f57a",
+                    "media": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iACRPSz.TeHs/v1/1200x675.jpg",
+                    "title": "China FX Regulator Surveys Companies on Impact of Trump Tariffs"
+                }
+            ]
+        },
+        {
+            "id": "bFlpcJUBvyT_ytpR4GYS",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "8f3ed69e29575aabdb0f3b97cfd62f99"
+            ],
+            "extraction_date": "2025-03-07 17:12:21",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States announced new tariffs on imports from Mexico and Canada, set to take effect on March 4, 2025. The tariffs are expected to impact industries related to base metals and vehicles, potentially affecting trade relations and economic activities between the countries.",
+                "measure_type": "new tariff",
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Materials"
+                ],
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "MX",
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico"
+                ],
+                "imposing_country_code": "US",
+                "implementation_date": "2025/03/04",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://trendlyne.com/posts/5016926/market-trades-lower-dalmia-bharat-to-invest-rs-3520-crore-in-maharashtra-and-karnataka",
+                    "id": "8f3ed69e29575aabdb0f3b97cfd62f99",
+                    "media": "https://trendlyne-media-mumbai-new.s3.amazonaws.com/post-files/2025-03-03/5016926-fed4553973814a2e98b1a98c8f2bfac8.webp",
+                    "title": "Market trades lower, Dalmia Bharat to invest Rs 3,520 crore in Maharashtra and Karnataka"
+                }
+            ]
+        },
+        {
+            "id": "bVlpcJUBvyT_ytpR4WZ7",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "64c70b478740d9e4c580c8ac89b3f6db",
+                "9fdfd3536e93001e6c2c1e8e244c95a2"
+            ],
+            "extraction_date": "2025-03-07 17:12:21",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In February 2025, the United States announced a new 10% tariff on all imports from China, marking a significant escalation in trade tensions. This broad measure affects all categories of goods imported from China, impacting various industries including materials, industrials, consumer discretionary, and consumer staples. The announcement has already led to significant market reactions globally, including a sharp decline in Indian stock markets.",
+                "affected_products": [
+                    "all Chinese imports"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Industrials",
+                    "Materials"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on all Chinese imports"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.livemint.com/market/stock-market-news/uschina-trade-war-2-0-how-does-it-impact-india-11740981326240.html",
+                    "id": "64c70b478740d9e4c580c8ac89b3f6db",
+                    "media": "https://www.livemint.com/lm-img/img/2025/03/03/1600x900/2-0-1424673532-istockphoto-1056780444-2048x2048-0_1679748206585_1740981536147.jpg",
+                    "title": "US-China trade war 2.0: How does it impact India?"
+                },
+                {
+                    "link": "https://www.thespuzz.com/us-china-trade-war-2-0-how-does-it-impact-india-stock-market-news",
+                    "id": "9fdfd3536e93001e6c2c1e8e244c95a2",
+                    "media": "https://i3.wp.com/www.livemint.com/lm-img/img/2025/03/03/1600x900/2-0-1424673532-istockphoto-1056780444-2048x2048-0_1679748206585_1740981536147.jpg",
+                    "title": "US-China trade war 2.0: How does it impact India?"
+                }
+            ]
+        },
+        {
+            "id": "a1lpcJUBvyT_ytpR32ZV",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "888b2da476e62080ee2059b490c8eef7",
+                "e8cb7192695617141e4c866968edee42"
+            ],
+            "extraction_date": "2025-03-07 17:12:20",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States announced an increase in import tariffs on China-made medical and surgical gloves to 50% effective January 2025, with a further increase to 100% by January 2026. This measure is expected to create opportunities for Malaysian glove manufacturers, as they prepare to meet the anticipated rise in global demand due to the higher tariffs on Chinese products.",
+                "affected_products": [
+                    "medical gloves",
+                    "surgical gloves"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Health Care"
+                ],
+                "main_tariff_rate": 50,
+                "announcement_date": "2025/01",
+                "tariff_rates": [
+                    "50% on surgical gloves",
+                    "50% on medical gloves"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "I: Live animals; animal products"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "expiration_date": "2026/01",
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "imposing_country_code": "US",
+                "implementation_date": "2025/01"
+            },
+            "articles": [
+                {
+                    "link": "https://www.accessnewswire.com/newsroom/en/industrial-and-manufacturing/flexidynamic-announces-substantial-revenue-growth-of-1421-to-rm2095-mil-994390",
+                    "id": "888b2da476e62080ee2059b490c8eef7",
+                    "media": "https://lirp.cdn-website.com/b585153d/dms3rep/multi/opt/1200-630-1920w.webp",
+                    "title": "Flexidynamic Announces Substantial Revenue Growth of 142.1% to RM20.95 Million in Q4 FY2024"
+                },
+                {
+                    "link": "https://www.finanznachrichten.de/nachrichten-2025-03/64704841-flexidynamic-holdings-berhad-flexidynamic-announces-substantial-revenue-growth-of-142-1-to-rm20-95-million-in-q4-fy2024-200.htm",
+                    "id": "e8cb7192695617141e4c866968edee42",
+                    "media": "https://finanznachrichten.de/content/g/fb.png",
+                    "title": "Flexidynamic Holdings Berhad: Flexidynamic Announces Substantial Revenue Growth of 142.1% to RM20.95 Million in Q4 FY2024"
+                }
+            ]
+        },
+        {
+            "id": "aVlpcJUBvyT_ytpR2mZ4",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "a3732ecf35742c4b89653e562300069b"
+            ],
+            "extraction_date": "2025-03-07 17:12:20",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States has announced new tariffs of 10% on imports from China, specifically targeting steel and aluminum products. This move is part of President Trump's aggressive tariff strategy in his second term, aiming to address trade imbalances and protect domestic industries. The tariffs are expected to impact the materials industry significantly.",
+                "affected_products": [
+                    "steel",
+                    "aluminum"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Materials"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on China"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "hs_product_categories": [
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "new tariff",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://itif.org/publications/2025/03/03/us-battle-plan-with-everett-eissenstat-and-kate-kalutkiewicz",
+                    "id": "a3732ecf35742c4b89653e562300069b",
+                    "media": "https://cdn.sanity.io/images/03hnmfyj/production/070b91b88e5874e802d76338cf3bfd8997fcd9f6-1920x1080.jpg",
+                    "title": "Podcast: The US Battle Plan, With Everett Eissenstat and Kate Kalutkiewicz"
+                }
+            ]
+        },
+        {
+            "id": "allpcJUBvyT_ytpR3WZX",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "79cb476abe1e7aba935027ffd5aec48b"
+            ],
+            "extraction_date": "2025-03-07 17:12:20",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "President Trump announced a 10% tariff on imports from China, contributing to a decline in consumer confidence due to inflation and trade concerns.",
+                "measure_type": "new tariff",
+                "affected_products": [
+                    "imports"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Staples"
+                ],
+                "main_tariff_rate": 10,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "10% on imports from China"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "imposing_country_code": "US",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://news.wgcu.org/2025-02-25/consumer-confidence-falls-the-most-since-2021-over-fears-about-inflation-and-tariffs",
+                    "id": "79cb476abe1e7aba935027ffd5aec48b",
+                    "media": "https://npr.brightspotcdn.com/dims4/default/04c3d57/2147483647/strip/true/crop/7782x4086+0+146/resize/1200x630!/quality/90/?url=https%3A%2F%2Fnpr.brightspotcdn.com%2Fdims3%2Fdefault%2Fstrip%2Ffalse%2Fcrop%2F7782x4377%200%200%2Fresize%2F7782x4377%21%2F%3Furl%3Dhttp%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F10%2F4d%2F6971d11845068abfcb2e84fa58ec%2Fgettyimages-2191628340.jpg",
+                    "title": "Consumer confidence falls the most since 2021 over fears about inflation and tariffs"
+                }
+            ]
+        },
+        {
+            "id": "aFlpcJUBvyT_ytpR2Gbx",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "75a308c4802cd6ec1d6d587cb3ac7e14",
+                "0c44abd1f695a234289f884be87cce34",
+                "b212b7a41e3b61c0671d0cb18588c8ad"
+            ],
+            "extraction_date": "2025-03-07 17:12:19",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States has increased import duties on Chinese goods to 20%, as part of the Trump administration's trade policies. This tariff increase is likely affecting industries such as materials and consumer discretionary, with specific impacts on base metals, machinery, and vehicles. The move is part of ongoing trade tensions between the US and China, with potential implications for inflation and consumer behavior in the US.",
+                "affected_products": [
+                    "Chinese goods"
+                ],
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Consumer Staples",
+                    "Materials"
+                ],
+                "main_tariff_rate": 20,
+                "announcement_date": "2025/02",
+                "tariff_rates": [
+                    "20% on Chinese goods"
+                ],
+                "targeted_country_codes": [
+                    "CN"
+                ],
+                "policy_objective": "negotiate with other countries",
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles",
+                    "IV: Prepared foodstuffs; beverages, spirits, tobacco",
+                    "VI: Products of the chemical or allied industries",
+                    "X: Pulp of wood; paper and paperboard",
+                    "XI: Textiles and textile articles",
+                    "V: Mineral products",
+                    "XIX: Arms and ammunition",
+                    "XXI: Works of art, collectors' pieces",
+                    "XIII: Articles of stone, ceramic products, glass",
+                    "XV: Base metals and articles of base metal",
+                    "XII: Footwear, headgear, umbrellas",
+                    "VIII: Raw hides and skins, leather, furskins",
+                    "XVIII: Optical, photographic, medical instruments",
+                    "III: Animal or vegetable fats and oils",
+                    "IX: Wood and articles of wood",
+                    "I: Live animals; animal products",
+                    "XIV: Pearls, precious stones and metals",
+                    "XVII: Vehicles, aircraft, vessels",
+                    "VII: Plastics and rubber",
+                    "II: Vegetable products",
+                    "XVI: Machinery and mechanical appliances"
+                ],
+                "targeted_country_names": [
+                    "China"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "imposing_country_code": "US"
+            },
+            "articles": [
+                {
+                    "link": "https://www.dailygazette.com/ap/business/stock-market-today-asian-shares-advance-on-back-of-wall-sts-rally-and-upbeat-chinese/article_218c7454-94ca-5c36-bb4e-4d5a8990b9ad.html",
+                    "id": "75a308c4802cd6ec1d6d587cb3ac7e14",
+                    "media": "https://bloximages.chicago2.vip.townnews.com/dailygazette.com/content/tncms/assets/v3/editorial/c/07/c074a586-809a-5e19-ae79-0914f164993c/67c52fd0e4bde.image.jpg?crop=1763%2C926%2C0%2C124&resize=1200%2C630&order=crop%2Cresize",
+                    "title": "Stock market today: Asian shares advance on back of Wall St's rally and upbeat Chinese factory data"
+                },
+                {
+                    "link": "https://www.sfchronicle.com/news/world/article/stock-market-today-asian-shares-advance-on-back-20198699.php",
+                    "id": "0c44abd1f695a234289f884be87cce34",
+                    "media": "https://s.hdnux.com/photos/01/47/42/63/27143404/3/rawImage.jpg",
+                    "title": "Stock market today: Asian shares advance on back of Wall St's rally and upbeat Chinese factory data"
+                },
+                {
+                    "link": "https://www.compuserve.com/pf/story/0001/20250302/72339ddf1ecb65d7815f4bb5272197d7",
+                    "id": "b212b7a41e3b61c0671d0cb18588c8ad",
+                    "media": "https://pslca.web.aol.com/fotosrch/2/921b13aa816c491ca6cf0cd10ca30220.jpg",
+                    "title": "Stock market today: Asian shares advance on back of Wall St's rally and upbeat Chinese factory data"
+                }
+            ]
+        },
+        {
+            "id": "Z1lpcJUBvyT_ytpR0mbv",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "c72ad3d7352c511fa09d942e2ca05c55"
+            ],
+            "extraction_date": "2025-03-07 17:12:18",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States announced new tariffs on Mexico, Canada, and China, contributing to economic uncertainty and affecting the gold market. The announcement has increased fears of a prolonged trade conflict, reducing investor optimism.",
+                "measure_type": "new tariff",
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Materials"
+                ],
+                "main_tariff_rate": 0,
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "MX",
+                    "CA",
+                    "CN"
+                ],
+                "targeted_country_names": [
+                    "Canada",
+                    "Mexico",
+                    "China"
+                ],
+                "imposing_country_code": "US",
+                "relevance_score": "High"
+            },
+            "articles": [
+                {
+                    "link": "https://www.fxempire.com/forecasts/article/gold-faces-pressure-amid-strong-us-dollar-and-trade-uncertainty-1501266",
+                    "id": "c72ad3d7352c511fa09d942e2ca05c55",
+                    "media": "https://responsive.fxempire.com/v7/_fxempire_/2025/01/Gold-50J-6.jpg?func=cover&q=70&width=700",
+                    "title": "Gold Faces Pressure Amid Strong US Dollar and Trade Uncertainty"
+                }
+            ]
+        },
+        {
+            "id": "ZVlpcJUBvyT_ytpR0Gbh",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "d674773e13972a79e5fa8dc28e1ddead"
+            ],
+            "extraction_date": "2025-03-07 17:12:17",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "In January 2025, the Nigerian Communications Commission (NCC) announced a 50% increase in telecom tariffs to ensure the sustainability of the industry amid inflation and foreign exchange volatility. The new rates, implemented on February 11, 2025, include NGN6 for SMS, NGN16.25 per minute for voice calls, and NGN525 for 1GB of data. The increase aims to address rising operational costs and maintain service quality. The NCC has mandated telcos to improve network quality and transparency in billing, with a three-month timeline for compliance.",
+                "affected_products": [
+                    "voice calls",
+                    "SMS",
+                    "data bundles"
+                ],
+                "imposing_country_name": "Nigeria",
+                "affected_industries": [
+                    "Communication Services"
+                ],
+                "main_tariff_rate": 50,
+                "announcement_date": "2025/01",
+                "tariff_rates": [
+                    "NGN16.25 on voice calls per minute",
+                    "NGN6 on SMS",
+                    "50% on telecom services",
+                    "NGN525 on 1GB data"
+                ],
+                "targeted_country_codes": [
+                    "NG"
+                ],
+                "policy_objective": "sustainability of the industry",
+                "hs_product_categories": [
+                    "XX: Miscellaneous manufactured articles"
+                ],
+                "targeted_country_names": [
+                    "Nigeria"
+                ],
+                "relevance_score": "High",
+                "measure_type": "tariff increase",
+                "previous_tariff_rate": "NGN4 on SMS, NGN11 on voice calls per minute, NGN350 on 1GB data",
+                "imposing_country_code": "NG",
+                "implementation_date": "2025/02/11"
+            },
+            "articles": [
+                {
+                    "link": "https://thenationonlineng.net/tariff-hike-subscribers-task-telcos-on-improved-services",
+                    "id": "d674773e13972a79e5fa8dc28e1ddead",
+                    "media": "https://thenationonlineng.net/wp-content/uploads/2020/08/Nigerian-Communications-Commission.jpg",
+                    "title": "Tariff hike: subscribers task telcos on improved services"
+                }
+            ]
+        },
+        {
+            "id": "ZllpcJUBvyT_ytpR0Gbq",
+            "event_type": "tariffs_v2",
+            "global_event_type": "TradePolicy",
+            "associated_article_ids": [
+                "242cd69e567372b5b759dbc8779a3a57"
+            ],
+            "extraction_date": "2025-03-07 17:12:17",
+            "event_date": null,
+            "company_name": null,
+            "tariffs_v2": {
+                "summary": "The United States has announced new tariffs on imports from Canada, set to take effect in March 2025. This move follows recent comments by President Trump regarding trade deficits and defense spending with Canada. The tariffs are part of broader trade tensions between the two countries, with potential impacts on industries such as materials and consumer discretionary goods.",
+                "measure_type": "new tariff",
+                "imposing_country_name": "United States",
+                "affected_industries": [
+                    "Consumer Discretionary",
+                    "Materials"
+                ],
+                "announcement_date": "2025/02",
+                "targeted_country_codes": [
+                    "CA"
+                ],
+                "hs_product_categories": [
+                    "XVII: Vehicles, aircraft, vessels",
+                    "XV: Base metals and articles of base metal"
+                ],
+                "targeted_country_names": [
+                    "Canada"
+                ],
+                "imposing_country_code": "US",
+                "implementation_date": "2025/03",
+                "relevance_score": "Medium"
+            },
+            "articles": [
+                {
+                    "link": "https://www.independent.co.uk/arts-entertainment/tv/news/wwe-canada-trump-us-national-anthem-elimination-chamber-netflix-b2707723.html",
+                    "id": "242cd69e567372b5b759dbc8779a3a57",
+                    "media": "https://static.independent.co.uk/2025/03/02/11/30/Screenshot-2025-03-02-at-11-23-33.png?trim=0,248,0,246&width=1200&height=800&crop=1200:800",
+                    "title": "Canadian WWE fans called 'terrible' after loudly protesting Trump at Toronto event"
+                }
+            ]
+        }
+    ]
+}
