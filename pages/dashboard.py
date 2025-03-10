@@ -381,3 +381,133 @@ def debug_map_data(events_df):
 
 # Use this after loading the data and before creating visualizations
 debug_map_data(events_df)
+
+st.write("### Direct Map Implementation Test")
+st.write("Testing direct map implementation using go.Choropleth")
+
+# Directly using the data we see in the debug output
+direct_map_data = pd.DataFrame(
+    [
+        {"country_code": "CN", "count": 15},
+        {"country_code": "CA", "count": 14},
+        {"country_code": "MX", "count": 8},
+        {"country_code": "NG", "count": 2},
+        {"country_code": "US", "count": 1},
+        {"country_code": "IN", "count": 1},
+        {"country_code": "CH", "count": 1},
+    ]
+)
+
+st.write("Direct map data:")
+st.write(direct_map_data)
+
+# Create direct choropleth map
+try:
+    import plotly.graph_objects as go
+
+    direct_fig = go.Figure(
+        data=go.Choropleth(
+            locations=direct_map_data["country_code"],
+            z=direct_map_data["count"],
+            locationmode="ISO-3",  # Try explicitly setting locationmode
+            colorscale="Blues",
+            marker_line_color="white",
+            marker_line_width=0.5,
+            colorbar_title="Event Count",
+        )
+    )
+
+    direct_fig.update_layout(
+        title_text="Direct Map Test",
+        geo=dict(
+            showframe=False,
+            showcoastlines=True,
+            projection_type="natural earth",
+            showland=True,
+            landcolor="lightgray",
+            countrycolor="white",
+            coastlinecolor="white",
+            lakecolor="white",
+            showocean=True,
+            oceancolor="aliceblue",
+        ),
+        height=400,
+        margin=dict(l=0, r=0, t=30, b=0),
+    )
+
+    st.plotly_chart(direct_fig, use_container_width=True)
+except Exception as e:
+    st.error(f"Error creating direct map: {e}")
+
+
+st.write("### ISO-2 Format Map Test")
+st.write("Testing with explicit ISO-2 format")
+
+# Convert 2-letter ISO codes (ISO-2) to 3-letter ISO codes (ISO-3)
+iso2_to_iso3 = {
+    "CN": "CHN",  # China
+    "CA": "CAN",  # Canada
+    "MX": "MEX",  # Mexico
+    "NG": "NGA",  # Nigeria
+    "US": "USA",  # United States
+    "IN": "IND",  # India
+    "CH": "CHE",  # Switzerland
+    "LI": "LIE",  # Liechtenstein
+    "NO": "NOR",  # Norway
+    "IS": "ISL",  # Iceland
+    "EU": "EUR",  # European Union (not a standard ISO but used for testing)
+}
+
+# Use the same data but with ISO-3 codes
+iso3_map_data = pd.DataFrame(
+    [
+        {"country_code": iso2_to_iso3.get("CN", "CN"), "count": 15},
+        {"country_code": iso2_to_iso3.get("CA", "CA"), "count": 14},
+        {"country_code": iso2_to_iso3.get("MX", "MX"), "count": 8},
+        {"country_code": iso2_to_iso3.get("NG", "NG"), "count": 2},
+        {"country_code": iso2_to_iso3.get("US", "US"), "count": 1},
+        {"country_code": iso2_to_iso3.get("IN", "IN"), "count": 1},
+        {"country_code": iso2_to_iso3.get("CH", "CH"), "count": 1},
+    ]
+)
+
+st.write("ISO-3 formatted map data:")
+st.write(iso3_map_data)
+
+# Create direct choropleth map with ISO-3 codes
+try:
+    import plotly.graph_objects as go
+
+    iso3_fig = go.Figure(
+        data=go.Choropleth(
+            locations=iso3_map_data["country_code"],
+            z=iso3_map_data["count"],
+            # No locationmode needed for ISO-3
+            colorscale="Blues",
+            marker_line_color="white",
+            marker_line_width=0.5,
+            colorbar_title="Event Count",
+        )
+    )
+
+    iso3_fig.update_layout(
+        title_text="ISO-3 Map Test",
+        geo=dict(
+            showframe=False,
+            showcoastlines=True,
+            projection_type="natural earth",
+            showland=True,
+            landcolor="lightgray",
+            countrycolor="white",
+            coastlinecolor="white",
+            lakecolor="white",
+            showocean=True,
+            oceancolor="aliceblue",
+        ),
+        height=400,
+        margin=dict(l=0, r=0, t=30, b=0),
+    )
+
+    st.plotly_chart(iso3_fig, use_container_width=True)
+except Exception as e:
+    st.error(f"Error creating ISO-3 map: {e}")
