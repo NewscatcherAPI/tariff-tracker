@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import pycountry
 from typing import Dict, List, Any, Optional, Union, Tuple
 
+from utils.api import format_api_request, call_events_api, check_api_health
+
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.api import format_api_request, call_events_api
