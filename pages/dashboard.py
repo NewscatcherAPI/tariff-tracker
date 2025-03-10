@@ -69,14 +69,43 @@ def load_sample_data():
             return data
     except FileNotFoundError:
         st.error(f"Sample data file not found at {file_path}")
+        # Return minimal data structure to prevent errors
         return {"events": []}
     except json.JSONDecodeError:
         st.error("Error parsing the sample data file")
         return {"events": []}
 
 
+# When loading the data, provide fallbacks for empty data
 sample_data = load_sample_data()
-events_df = events_to_dataframe(sample_data.get("events", []))
+
+# Print the sample data for debugging
+if st.session_state.get("debug_mode", False):
+    st.write("Raw sample data:", sample_data)
+
+# Apply cleanup to events
+events = clean_event_data(sample_data.get("events", []))
+
+# Print cleaned events for debugging
+if st.session_state.get("debug_mode", False):
+    st.write("Cleaned events:", events)
+
+# Convert to DataFrame
+events_df = events_to_dataframe(events)
+
+# After getting the DataFrame, apply country standardization
+# Import here to avoid circular imports
+from utils.data_processing import standardize_countries_in_dataframe
+
+events_df = standardize_countries_in_dataframe(events_df)
+
+# Enable this for debugging
+if st.session_state.get("debug_mode", False):
+    st.write("Data frame after standardization:", events_df)
+
+# Temporary data debug toggle in sidebar
+with st.sidebar:
+    st.checkbox("Enable debug mode", key="debug_mode")
 
 # Main content
 st.markdown(
@@ -222,3 +251,64 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("Built with ❤️ using Streamlit • Data provided by Events API")
+
+
+def debug_sample_data():
+    """
+    Check the contents of the sample data file and display debug information.
+    """
+    try:
+        file_path = os.path.join("data", "sample_tariff_events.json")
+
+        # Check if file exists
+        if not os.path.exists(file_path):
+            st.error(f"Sample data file not found at {file_path}")
+            return
+
+        # Get file size
+        file_size = os.path.getsize(file_path)
+        st.write(f"Sample data file size: {file_size} bytes")
+
+        # Read the file content
+        with open(file_path, "r") as file:
+            content = file.read()
+
+        # Try to parse JSON
+        try:
+            data = json.loads(content)
+
+            # Check structure
+            if "events" in data:
+                st.write(f"Number of events in file: {len(data['events'])}")
+
+                if data["events"]:
+                    # Check first event
+                    first_event = data["events"][0]
+                    st.write("First event keys:", list(first_event.keys()))
+
+                    if "tariffs_v2" in first_event:
+                        st.write(
+                            "First event tariffs_v2 keys:",
+                            list(first_event["tariffs_v2"].keys()),
+                        )
+                    else:
+                        st.warning("No tariffs_v2 data in first event")
+                else:
+                    st.warning("Events array is empty")
+            else:
+                st.warning("No 'events' key in sample data")
+                st.write("Top-level keys:", list(data.keys()))
+
+        except json.JSONDecodeError as e:
+            st.error(f"Failed to parse JSON: {e}")
+            # Show first 500 chars of the file
+            st.text(f"First 500 characters of file:\n{content[:500]}...")
+
+    except Exception as e:
+        st.error(f"Error checking sample data: {e}")
+
+
+# In the dashboard, add:
+if st.session_state.get("debug_mode", False):
+    with st.expander("Debug Sample Data"):
+        debug_sample_data()
