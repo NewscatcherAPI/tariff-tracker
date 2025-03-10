@@ -155,6 +155,9 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
     return fig
 
 
+# Updated create_world_map function that leverages our existing standardization
+
+
 def create_world_map(
     events_df: pd.DataFrame, map_type: str = "imposing"
 ) -> Optional[go.Figure]:
@@ -171,52 +174,85 @@ def create_world_map(
     if events_df.empty:
         return None
 
+    # Print debug info to help diagnose issues
+    print(f"Map type: {map_type}")
+    print(f"DataFrame columns: {events_df.columns.tolist()}")
+    print(f"DataFrame shape: {events_df.shape}")
+
     # Create a copy of the DataFrame to avoid modifying the original
     df = events_df.copy()
 
+    # Initialize country_counts DataFrame
+    country_counts = None
+
     # Prepare data based on map type
     if map_type == "imposing":
-        # Focus on country codes which work better with choropleth maps
+        # Count events by imposing country code if available
         if "imposing_country_code" in df.columns:
-            # Count events by imposing country code
-            country_counts = df["imposing_country_code"].value_counts().reset_index()
-            country_counts.columns = ["country_code", "count"]
-            title = "Countries Imposing Tariffs"
-        else:
-            return None
-    else:  # targeted countries
-        # This is more complex because targeted_country_codes can be a list or string
-        if "targeted_country_codes" not in df.columns:
-            return None
+            # Make sure the column is not empty
+            valid_codes = df[
+                df["imposing_country_code"].notna()
+                & (df["imposing_country_code"] != "")
+            ]
 
-        # Process the targeted country codes
+            if not valid_codes.empty:
+                print(
+                    f"Valid imposing country codes: {valid_codes['imposing_country_code'].unique().tolist()}"
+                )
+                country_counts = (
+                    valid_codes["imposing_country_code"].value_counts().reset_index()
+                )
+                country_counts.columns = ["country_code", "count"]
+                title = "Countries Imposing Tariffs"
+            else:
+                print("No valid imposing country codes found")
+        else:
+            print("No imposing_country_code column found")
+    else:  # targeted countries
+        # Process targeted country codes which can be in different formats
         all_targeted_codes = []
 
-        for codes in df["targeted_country_codes"]:
-            if isinstance(codes, list):
-                all_targeted_codes.extend(codes)
-            elif isinstance(codes, str):
-                # If it's a comma-separated string, split it
-                all_targeted_codes.extend([code.strip() for code in codes.split(",")])
+        if "targeted_country_codes" in df.columns:
+            # Explicitly convert each value and handle different formats
+            for i, row in df.iterrows():
+                codes = row.get("targeted_country_codes")
 
-        # If no targeted countries found
-        if not all_targeted_codes:
-            return None
+                # Debug the value
+                print(f"Row {i}, targeted_country_codes: {codes}, type: {type(codes)}")
 
-        # Count occurrences of each country code
-        country_counts = pd.Series(all_targeted_codes).value_counts().reset_index()
-        country_counts.columns = ["country_code", "count"]
-        title = "Countries Targeted by Tariffs"
+                if isinstance(codes, list):
+                    all_targeted_codes.extend([c for c in codes if c])
+                elif isinstance(codes, str):
+                    if "," in codes:
+                        # Split comma-separated string
+                        all_targeted_codes.extend(
+                            [c.strip() for c in codes.split(",") if c.strip()]
+                        )
+                    else:
+                        # Single code
+                        all_targeted_codes.append(codes.strip())
 
-    if country_counts.empty:
+            print(f"Processed targeted country codes: {all_targeted_codes}")
+
+            if all_targeted_codes:
+                country_counts = (
+                    pd.Series(all_targeted_codes).value_counts().reset_index()
+                )
+                country_counts.columns = ["country_code", "count"]
+                title = "Countries Targeted by Tariffs"
+            else:
+                print("No valid targeted country codes found")
+        else:
+            print("No targeted_country_codes column found")
+
+    # If we couldn't get country codes, return None
+    if country_counts is None or country_counts.empty:
+        print("No country count data available for map")
         return None
 
-    # Special handling for EU - represent as member countries
-    # First, save a copy of the original data
-    original_counts = country_counts.copy()
+    print(f"Original country counts: {country_counts.to_dict('records')}")
 
-    # Create new dataframe with expanded EU countries if needed
-    expanded_data = []
+    # Special handling for EU - represent as member countries
     eu_countries = [
         "AT",
         "BE",
@@ -247,22 +283,30 @@ def create_world_map(
         "SE",
     ]
 
-    for _, row in original_counts.iterrows():
-        if row["country_code"] == "EU":
-            # Add each EU country with the same count
-            for country in eu_countries:
-                expanded_data.append({"country_code": country, "count": row["count"]})
-        else:
-            expanded_data.append(row.to_dict())
+    # Handle the EU special case
+    expanded_data = []
+    for _, row in country_counts.iterrows():
+        code = row["country_code"]
+        count = row["count"]
 
-    # Convert back to DataFrame
+        if code == "EU":
+            # Add each EU country with the same count
+            for eu_code in eu_countries:
+                expanded_data.append({"country_code": eu_code, "count": count})
+        else:
+            expanded_data.append({"country_code": code, "count": count})
+
+    # Convert expanded data to DataFrame
     if expanded_data:
         country_counts = pd.DataFrame(expanded_data)
 
-        # Aggregate if there are duplicates after expansion
+        # Aggregate if there are duplicates
         country_counts = (
             country_counts.groupby("country_code")["count"].sum().reset_index()
         )
+
+    # Print final data for debugging
+    print(f"Final map data: {country_counts.to_dict('records')}")
 
     # Create choropleth map with Plotly Express
     fig = px.choropleth(
