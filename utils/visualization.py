@@ -32,9 +32,51 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
     if df.empty:
         return None
 
-    # Sort by date
-    df["date_for_sorting"] = pd.to_datetime(df["announcement_date"], errors="coerce")
-    df = df.sort_values("date_for_sorting")
+    # Convert dates to datetime format
+    # First, ensure the date columns exist
+    if "implementation_date" not in df.columns:
+        df["implementation_date"] = df[
+            "announcement_date"
+        ]  # Use announcement date if implementation date is missing
+
+    # Convert to datetime, handling any parsing errors by coercing to NaT
+    df["announcement_date"] = pd.to_datetime(df["announcement_date"], errors="coerce")
+    df["implementation_date"] = pd.to_datetime(
+        df["implementation_date"], errors="coerce"
+    )
+
+    # Filter out rows where date conversion failed
+    df = df.dropna(subset=["announcement_date"])
+
+    # For rows where implementation_date is NaT, use announcement_date
+    mask = df["implementation_date"].isna()
+    df.loc[mask, "implementation_date"] = df.loc[mask, "announcement_date"]
+
+    # For implementation dates before announcement dates, use announcement_date
+    mask = df["implementation_date"] < df["announcement_date"]
+    df.loc[mask, "implementation_date"] = df.loc[mask, "announcement_date"]
+
+    # Add one month to implementation date if it equals announcement date
+    # This ensures the timeline bar has sufficient width to be visible
+    mask = df["implementation_date"] == df["announcement_date"]
+    df.loc[mask, "implementation_date"] = df.loc[
+        mask, "announcement_date"
+    ] + pd.DateOffset(months=1)
+
+    # Sort by date for better visualization
+    df = df.sort_values("announcement_date")
+
+    # Get the date range
+    min_date = df["announcement_date"].min()
+    max_date = df["implementation_date"].max()
+
+    # If the date range is too small, extend it to ensure a reasonable visualization
+    date_range = max_date - min_date
+    if date_range.days < 90:  # Less than 3 months
+        # Extend the range to at least 6 months
+        new_min_date = max_date - pd.DateOffset(months=6)
+        if new_min_date < min_date:
+            min_date = new_min_date
 
     # Create timeline figure
     fig = px.timeline(
@@ -44,12 +86,21 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
         y="imposing_country",
         color="measure_type",
         hover_name="summary",
-        hover_data=["targeted_countries", "main_tariff_rate", "relevance_score"],
+        hover_data=["targeted_countries", "main_tariff_rate"],
         labels={
             "announcement_date": "Announcement Date",
             "implementation_date": "Implementation Date",
         },
         title="Tariff Event Timeline",
+        color_discrete_map={
+            "new tariff": "#FF4B4B",  # Bright red
+            "tariff increase": "#5DADE2",  # Light blue
+            "tariff reduction": "#4169E1",  # Royal blue
+            "retaliatory tariff": "#1E8449",  # Dark green
+            "import ban": "#8E44AD",  # Purple
+            "quota": "#F39C12",  # Orange
+            "other trade restriction": "#F5B7B1",  # Light red/pink
+        },
     )
 
     # Customize layout
@@ -60,6 +111,45 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
         yaxis_title="Imposing Country",
         yaxis={"categoryorder": "total ascending"},
         hovermode="closest",
+        # Set a fixed date range to make visualization more representative
+        xaxis_range=[
+            min_date,
+            max_date + pd.DateOffset(days=15),
+        ],  # Add a bit of padding on the right
+    )
+
+    # Add vertical line for current date using shapes instead of add_vline
+    # This avoids the timestamp arithmetic issue
+    today = pd.Timestamp.now().floor("D")
+
+    fig.update_layout(
+        shapes=[
+            dict(
+                type="line",
+                xref="x",
+                yref="paper",
+                x0=today,
+                y0=0,
+                x1=today,
+                y1=1,
+                line=dict(
+                    color="gray",
+                    width=2,
+                    dash="dash",
+                ),
+            )
+        ],
+        annotations=[
+            dict(
+                x=today,
+                y=1.05,
+                xref="x",
+                yref="paper",
+                text="Today",
+                showarrow=False,
+                font=dict(color="gray"),
+            )
+        ],
     )
 
     return fig
