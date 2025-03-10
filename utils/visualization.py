@@ -156,7 +156,7 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
 
 
 def create_world_map(
-    events_df: pd.DataFrame, map_type: str = "imposing"
+    events_df: pd.DataFrame, map_type: str = "imposing", debug: bool = False
 ) -> Optional[go.Figure]:
     """
     Create a world map visualization of tariff events.
@@ -164,6 +164,7 @@ def create_world_map(
     Args:
         events_df: DataFrame containing event data
         map_type: Type of map to create ('imposing' or 'targeted')
+        debug: Enable debug logging
 
     Returns:
         World map figure or None if insufficient data
@@ -171,45 +172,127 @@ def create_world_map(
     if events_df.empty:
         return None
 
-    # Target column based on map type
-    target_column = (
-        "imposing_country_code" if map_type == "imposing" else "targeted_country_codes"
-    )
-    if target_column not in events_df.columns:
-        return None
+    # Print debug info if enabled
+    if debug:
+        print(f"Map type: {map_type}")
+        print(f"DataFrame columns: {events_df.columns.tolist()}")
+        print(f"DataFrame shape: {events_df.shape}")
 
-    # Prepare data for the map
-    country_codes = []
+    # Create a copy of the DataFrame to avoid modifying the original
+    df = events_df.copy()
 
-    # Process country codes
+    # Load ISO code mappings from CSV
+    try:
+        iso_codes_path = os.path.join("data", "country_codes_iso_3166.csv")
+        iso_codes_df = pd.read_csv(iso_codes_path)
+
+        # Create mapping dictionary
+        iso2_to_iso3 = {
+            row["Alpha-2 code"].strip(): row["Alpha-3 code"].strip()
+            for _, row in iso_codes_df.iterrows()
+        }
+
+        # Add special case for EU and Worldwide
+        iso2_to_iso3["EU"] = "EUR"  # European Union
+        iso2_to_iso3["WW"] = "WLD"  # Worldwide
+
+        if debug:
+            print(f"Loaded {len(iso2_to_iso3)} ISO code mappings from CSV")
+    except Exception as e:
+        # Fallback to a minimal set of mappings if CSV loading fails
+        print(f"Error loading ISO codes: {e}")
+        iso2_to_iso3 = {
+            "US": "USA",
+            "CN": "CHN",
+            "CA": "CAN",
+            "MX": "MEX",
+            "EU": "EUR",
+            "GB": "GBR",
+            "JP": "JPN",
+            "KR": "KOR",
+            "IN": "IND",
+            "AU": "AUS",
+            "BR": "BRA",
+            "RU": "RUS",
+            "NG": "NGA",
+            "ZA": "ZAF",
+            "CH": "CHE",
+            "NO": "NOR",
+            "WW": "WLD",  # Worldwide
+        }
+
+        if debug:
+            print(f"Using fallback ISO code mappings with {len(iso2_to_iso3)} entries")
+
+    # Prepare data based on map type
     if map_type == "imposing":
-        # For imposing countries, just extract the codes
-        country_codes = events_df[target_column].dropna().tolist()
-    else:
-        # For targeted countries, need to handle comma-separated strings
-        for codes in events_df[target_column].dropna():
-            if isinstance(codes, str):
-                # Split comma-separated string
-                parts = [part.strip() for part in codes.split(",")]
-                country_codes.extend(parts)
-            elif isinstance(codes, list):
-                # Already a list
-                country_codes.extend(codes)
+        # Focus on country codes which work better with choropleth maps
+        if "imposing_country_code" in df.columns:
+            # Count events by imposing country code
+            country_counts = df["imposing_country_code"].value_counts().reset_index()
+            country_counts.columns = ["country_code", "count"]
+            title = "Countries Imposing Tariffs"
 
-    if not country_codes:
+            if debug:
+                print(f"Found {len(country_counts)} unique imposing countries")
+        else:
+            if debug:
+                print("No imposing_country_code column found")
+            return None
+    else:  # targeted countries
+        # This is more complex because targeted_country_codes can be a list or string
+        if "targeted_country_codes" not in df.columns:
+            if debug:
+                print("No targeted_country_codes column found")
+            return None
+
+        # Process the targeted country codes
+        all_targeted_codes = []
+
+        for i, codes in enumerate(df["targeted_country_codes"]):
+            if debug and i < 10:  # Limit debug output
+                print(f"Row {i}, targeted_country_codes: {codes}, type: {type(codes)}")
+
+            if isinstance(codes, list):
+                all_targeted_codes.extend(codes)
+            elif isinstance(codes, str):
+                # If it's a comma-separated string, split it
+                all_targeted_codes.extend([code.strip() for code in codes.split(",")])
+
+        # If no targeted countries found
+        if not all_targeted_codes:
+            if debug:
+                print("No targeted country codes were extracted")
+            return None
+
+        # Count occurrences of each country code
+        country_counts = pd.Series(all_targeted_codes).value_counts().reset_index()
+        country_counts.columns = ["country_code", "count"]
+        title = "Countries Targeted by Tariffs"
+
+        if debug:
+            print(f"Processed targeted country codes: {all_targeted_codes}")
+            print(f"Found {len(country_counts)} unique targeted countries")
+
+    if country_counts.empty:
+        if debug:
+            print("No country count data available")
         return None
 
-    # Count frequencies
-    from collections import Counter
-
-    code_counts = Counter(country_codes)
-
-    # Convert to DataFrame
-    map_data = pd.DataFrame(
-        {"country_code": list(code_counts.keys()), "count": list(code_counts.values())}
+    # Convert ISO-2 to ISO-3 codes
+    country_counts["iso3_code"] = country_counts["country_code"].map(
+        lambda x: iso2_to_iso3.get(x, x)
     )
 
-    # Handle EU by expanding to member states
+    if debug:
+        print(f"Original country counts: {country_counts.to_dict('records')}")
+
+    # Special handling for EU - represent as member countries
+    # First, save a copy of the original data
+    original_counts = country_counts.copy()
+
+    # Create new dataframe with expanded EU countries if needed
+    expanded_data = []
     eu_countries = [
         "AT",
         "BE",
@@ -240,40 +323,36 @@ def create_world_map(
         "SE",
     ]
 
-    # Check if EU is in the data
-    if "EU" in map_data["country_code"].values:
-        eu_count = map_data.loc[map_data["country_code"] == "EU", "count"].iloc[0]
-
-        # Remove EU
-        map_data = map_data[map_data["country_code"] != "EU"]
-
-        # Add EU member states
-        for country in eu_countries:
-            # If country already exists, add to its count
-            if country in map_data["country_code"].values:
-                idx = map_data[map_data["country_code"] == country].index[0]
-                map_data.at[idx, "count"] += eu_count
-            else:
-                # Add new row
-                map_data = pd.concat(
-                    [
-                        map_data,
-                        pd.DataFrame({"country_code": [country], "count": [eu_count]}),
-                    ]
+    for _, row in original_counts.iterrows():
+        if row["country_code"] == "EU":
+            # Add each EU country with the same count
+            for country in eu_countries:
+                iso3 = iso2_to_iso3.get(country, country)
+                expanded_data.append(
+                    {"country_code": country, "count": row["count"], "iso3_code": iso3}
                 )
+        else:
+            expanded_data.append(row.to_dict())
 
-    # Create the map
-    title = (
-        "Countries Imposing Tariffs"
-        if map_type == "imposing"
-        else "Countries Targeted by Tariffs"
-    )
+    # Convert back to DataFrame
+    if expanded_data:
+        country_counts = pd.DataFrame(expanded_data)
 
+        # Aggregate if there are duplicates after expansion
+        country_counts = (
+            country_counts.groupby(["country_code", "iso3_code"])["count"]
+            .sum()
+            .reset_index()
+        )
+
+    if debug:
+        print(f"Final map data: {country_counts.to_dict('records')}")
+
+    # Create choropleth map using go.Choropleth for better control
     fig = go.Figure(
         data=go.Choropleth(
-            locations=map_data["country_code"],
-            z=map_data["count"],
-            locationmode="ISO-3",
+            locations=country_counts["iso3_code"],  # Use ISO-3 codes
+            z=country_counts["count"],
             colorscale="Blues",
             marker_line_color="white",
             marker_line_width=0.5,
@@ -281,6 +360,7 @@ def create_world_map(
         )
     )
 
+    # Customize layout
     fig.update_layout(
         title_text=title,
         geo=dict(
