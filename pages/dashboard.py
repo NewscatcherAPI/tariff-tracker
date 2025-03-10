@@ -183,10 +183,30 @@ with col4:
     )
 
 # Visualizations
+# World map visualization
 st.subheader("Global Tariff Heatmap")
 map_type = st.radio(
     "Select map type:", ["Imposing Countries", "Targeted Countries"], horizontal=True
 )
+
+# Add debug info for map data
+if st.session_state.get("debug_mode", False):
+    with st.expander("Map Data Debug Info"):
+        if "imposing_country_code" in events_df.columns:
+            st.write(
+                "Imposing country codes:", events_df["imposing_country_code"].unique()
+            )
+        else:
+            st.write("No imposing_country_code column found")
+
+        if "targeted_country_codes" in events_df.columns:
+            st.write("Sample targeted country codes:")
+            for i, codes in enumerate(events_df["targeted_country_codes"].head()):
+                st.write(f"Row {i}: {codes}, Type: {type(codes)}")
+        else:
+            st.write("No targeted_country_codes column found")
+
+# Create the map visualization
 map_fig = create_world_map(
     events_df, "imposing" if map_type == "Imposing Countries" else "targeted"
 )
@@ -312,3 +332,52 @@ def debug_sample_data():
 if st.session_state.get("debug_mode", False):
     with st.expander("Debug Sample Data"):
         debug_sample_data()
+
+
+def debug_map_data(events_df):
+    """
+    Debug the data used for map visualization.
+    """
+    if st.session_state.get("debug_mode", False):
+        with st.expander("Debug Map Data"):
+            # Check DataFrame basics
+            st.subheader("DataFrame Info")
+            st.write(f"Shape: {events_df.shape}")
+            st.write(f"Columns: {events_df.columns.tolist()}")
+
+            # Check country columns
+            st.subheader("Country Data")
+
+            if "imposing_country" in events_df.columns:
+                imposing_countries = (
+                    events_df["imposing_country"].value_counts().reset_index()
+                )
+                imposing_countries.columns = ["Country", "Count"]
+                st.write("Imposing Countries:")
+                st.dataframe(imposing_countries)
+
+            if "imposing_country_code" in events_df.columns:
+                imposing_codes = (
+                    events_df["imposing_country_code"].value_counts().reset_index()
+                )
+                imposing_codes.columns = ["Country Code", "Count"]
+                st.write("Imposing Country Codes:")
+                st.dataframe(imposing_codes)
+
+            if "targeted_countries" in events_df.columns:
+                st.write("Sample Targeted Countries:")
+                for i, row in events_df.iloc[:5].iterrows():
+                    st.write(
+                        f"Row {i}: {row.get('targeted_countries')}, Type: {type(row.get('targeted_countries'))}"
+                    )
+
+            if "targeted_country_codes" in events_df.columns:
+                st.write("Sample Targeted Country Codes:")
+                for i, row in events_df.iloc[:5].iterrows():
+                    st.write(
+                        f"Row {i}: {row.get('targeted_country_codes')}, Type: {type(row.get('targeted_country_codes'))}"
+                    )
+
+
+# Use this after loading the data and before creating visualizations
+debug_map_data(events_df)
