@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import os
+import streamlit as st
 from datetime import datetime
 import re
 import pycountry
@@ -20,6 +22,7 @@ def clean_event_data(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         return []
 
     cleaned_events = []
+    code_to_name = load_country_codes()  # Load country code to name mapping
 
     for event in events:
         # Extract tariff_v2 data if it exists
@@ -27,22 +30,80 @@ def clean_event_data(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not tariff_data:
             continue
 
+        # Get country code
+        imposing_country_code = tariff_data.get("imposing_country_code", "")
+
+        # Use standardized country name if available, otherwise use the original name
+        if imposing_country_code and imposing_country_code in code_to_name:
+            imposing_country = code_to_name[imposing_country_code]
+        else:
+            imposing_country = tariff_data.get("imposing_country_name", "")
+
+        # Standardize targeted countries
+        targeted_country_codes = tariff_data.get("targeted_country_codes", [])
+        targeted_countries = []
+
+        if targeted_country_codes:
+            for code in targeted_country_codes:
+                if code in code_to_name:
+                    targeted_countries.append(code_to_name[code])
+                else:
+                    # If code not found in mapping, use original name if available
+                    original_names = tariff_data.get("targeted_country_names", [])
+                    idx = (
+                        targeted_country_codes.index(code)
+                        if code in targeted_country_codes
+                        else -1
+                    )
+                    if idx >= 0 and idx < len(original_names):
+                        targeted_countries.append(original_names[idx])
+                    else:
+                        targeted_countries.append(code)  # Use code as fallback
+        else:
+            # If no codes available, use original country names
+            targeted_countries = tariff_data.get("targeted_country_names", [])
+
+        # Handle different formats of data, lists vs strings
+        affected_industries = tariff_data.get("affected_industries", [])
+        if isinstance(affected_industries, str):
+            affected_industries = [
+                ind.strip() for ind in affected_industries.split(",") if ind.strip()
+            ]
+
+        affected_products = tariff_data.get("affected_products", [])
+        if isinstance(affected_products, str):
+            affected_products = [
+                prod.strip() for prod in affected_products.split(",") if prod.strip()
+            ]
+
+        hs_product_categories = tariff_data.get("hs_product_categories", [])
+        if isinstance(hs_product_categories, str):
+            hs_product_categories = [
+                cat.strip() for cat in hs_product_categories.split(",") if cat.strip()
+            ]
+
+        tariff_rates = tariff_data.get("tariff_rates", [])
+        if isinstance(tariff_rates, str):
+            tariff_rates = [
+                rate.strip() for rate in tariff_rates.split(",") if rate.strip()
+            ]
+
         # Create a cleaned event object with standardized fields
         cleaned_event = {
             "id": event.get("id", ""),
             "extraction_date": normalize_date(event.get("extraction_date", "")),
             "event_type": event.get("event_type", ""),
             "global_event_type": event.get("global_event_type", ""),
-            "imposing_country": tariff_data.get("imposing_country_name", ""),
-            "imposing_country_code": tariff_data.get("imposing_country_code", ""),
-            "targeted_countries": tariff_data.get("targeted_country_names", []),
-            "targeted_country_codes": tariff_data.get("targeted_country_codes", []),
+            "imposing_country": imposing_country,
+            "imposing_country_code": imposing_country_code,
+            "targeted_countries": targeted_countries,
+            "targeted_country_codes": targeted_country_codes,
             "measure_type": tariff_data.get("measure_type", ""),
-            "affected_industries": tariff_data.get("affected_industries", []),
-            "affected_products": tariff_data.get("affected_products", []),
-            "hs_product_categories": tariff_data.get("hs_product_categories", []),
+            "affected_industries": affected_industries,
+            "affected_products": affected_products,
+            "hs_product_categories": hs_product_categories,
             "main_tariff_rate": tariff_data.get("main_tariff_rate", None),
-            "tariff_rates": tariff_data.get("tariff_rates", []),
+            "tariff_rates": tariff_rates,
             "announcement_date": normalize_date(
                 tariff_data.get("announcement_date", "")
             ),
@@ -58,6 +119,17 @@ def clean_event_data(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         }
 
         cleaned_events.append(cleaned_event)
+
+    # Debug output if no events were processed
+    if not cleaned_events:
+        print("Warning: No events were processed. Check if the data format is correct.")
+        if events:
+            first_event = events[0]
+            print(f"Sample event structure: {list(first_event.keys())}")
+            if "tariffs_v2" in first_event:
+                print(
+                    f"Sample tariffs_v2 structure: {list(first_event['tariffs_v2'].keys())}"
+                )
 
     return cleaned_events
 
@@ -131,10 +203,6 @@ def clean_article_data(articles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return cleaned_articles
 
 
-# This is the change needed for utils/data_processing.py
-# Update the events_to_dataframe function to handle lists of dictionaries
-
-
 def events_to_dataframe(events: List[Dict[str, Any]]) -> pd.DataFrame:
     """
     Convert a list of event dictionaries to a pandas DataFrame.
@@ -146,35 +214,51 @@ def events_to_dataframe(events: List[Dict[str, Any]]) -> pd.DataFrame:
         DataFrame containing event data
     """
     if not events:
+        print("Warning: No events provided to events_to_dataframe")
         return pd.DataFrame()
 
-    # Clean the event data first
-    cleaned_events = clean_event_data(events)
+    # Clean the event data first if not already cleaned
+    if "tariffs_v2" in events[0]:
+        print("Converting raw API events to cleaned format")
+        cleaned_events = clean_event_data(events)
+    else:
+        print("Events already in cleaned format")
+        cleaned_events = events
 
     # Create DataFrame
-    df = pd.DataFrame(cleaned_events)
+    try:
+        df = pd.DataFrame(cleaned_events)
 
-    # Handle list columns by converting to string representation
-    for col in df.columns:
-        if df[col].apply(lambda x: isinstance(x, list)).any():
-            df[col] = df[col].apply(
-                lambda x: (
-                    ", ".join(
-                        [
-                            (
-                                str(item)
-                                if not isinstance(item, dict)
-                                else str(item.get("name", str(item)))
-                            )
-                            for item in x
-                        ]
+        # Debug information
+        print(f"Created DataFrame with {len(df)} rows and {len(df.columns)} columns")
+        print(f"Columns: {df.columns.tolist()}")
+
+        # Handle list columns by converting to string representation
+        for col in df.columns:
+            if df[col].apply(lambda x: isinstance(x, list)).any():
+                print(f"Converting list column to string: {col}")
+                df[col] = df[col].apply(
+                    lambda x: (
+                        ", ".join(
+                            [
+                                (
+                                    str(item)
+                                    if not isinstance(item, dict)
+                                    else str(item.get("name", str(item)))
+                                )
+                                for item in x
+                            ]
+                        )
+                        if isinstance(x, list)
+                        else x
                     )
-                    if isinstance(x, list)
-                    else x
                 )
-            )
 
-    return df
+        return df
+    except Exception as e:
+        print(f"Error creating DataFrame: {e}")
+        # Return empty DataFrame if conversion fails
+        return pd.DataFrame()
 
 
 def detect_potential_duplicates(
@@ -290,6 +374,122 @@ def get_country_name(country_code: str) -> str:
         pass
 
     return country_code
+
+
+# Improved load_country_codes function for utils/data_processing.py
+
+
+def load_country_codes() -> Dict[str, str]:
+    """
+    Load ISO 3166 country codes and names from CSV file.
+
+    Returns:
+        Dictionary mapping country codes to standardized country names
+    """
+    # Default mapping for common countries and special cases
+    default_mapping = {
+        "US": "United States",
+        "GB": "United Kingdom",
+        "EU": "European Union",
+        "CN": "China",
+        "RU": "Russia",
+        "JP": "Japan",
+        "DE": "Germany",
+        "FR": "France",
+        "CA": "Canada",
+        "AU": "Australia",
+        "BR": "Brazil",
+        "IN": "India",
+        "MX": "Mexico",
+        "KR": "South Korea",
+        "IT": "Italy",
+        "ES": "Spain",
+        "NL": "Netherlands",
+        "CH": "Switzerland",
+        "SA": "Saudi Arabia",
+        "TR": "Turkey",
+        "ZA": "South Africa",
+        "SG": "Singapore",
+        "MY": "Malaysia",
+        "ID": "Indonesia",
+        "TH": "Thailand",
+        "AE": "United Arab Emirates",
+    }
+
+    try:
+        country_codes_path = os.path.join("data", "country_codes_iso_3166.csv")
+        if os.path.exists(country_codes_path):
+            country_df = pd.read_csv(country_codes_path)
+            code_to_name = {
+                row["Alpha-2 code"].strip(): row["Country"].strip()
+                for _, row in country_df.iterrows()
+            }
+
+            # Add EU manually as it's not in ISO 3166 but used in our app
+            code_to_name["EU"] = "European Union"
+
+            return code_to_name
+        else:
+            st.warning(
+                "Country codes CSV file not found. Using default country mapping."
+            )
+            return default_mapping
+    except Exception as e:
+        st.warning(f"Failed to load country codes: {e}. Using default country mapping.")
+        return default_mapping
+
+
+def standardize_countries_in_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Standardize country names in a DataFrame to ensure consistency.
+
+    Args:
+        df: DataFrame with country names to standardize
+
+    Returns:
+        DataFrame with standardized country names
+    """
+    if df.empty:
+        return df
+
+    # Load country code to name mapping
+    code_to_name = load_country_codes()
+
+    # Create a copy of the DataFrame
+    standardized_df = df.copy()
+
+    # Country name cleanup and standardization
+    country_name_mapping = {
+        "United States of America": "United States",
+        "USA": "United States",
+        "United States": "United States",
+        "UK": "United Kingdom",
+        "Great Britain": "United Kingdom",
+        "European Union": "European Union",
+        "EU": "European Union",
+    }
+
+    # Update with any additional mappings from ISO codes
+    if "imposing_country_code" in standardized_df.columns:
+        for _, row in standardized_df.iterrows():
+            if (
+                pd.notna(row["imposing_country_code"])
+                and row["imposing_country_code"] in code_to_name
+            ):
+                code = row["imposing_country_code"]
+                country_name_mapping[code] = code_to_name[code]
+
+                # Also map any existing country name to the standardized name
+                if pd.notna(row["imposing_country"]):
+                    country_name_mapping[row["imposing_country"]] = code_to_name[code]
+
+    # Apply the mapping to imposing_country column
+    if "imposing_country" in standardized_df.columns:
+        standardized_df["imposing_country"] = standardized_df[
+            "imposing_country"
+        ].replace(country_name_mapping)
+
+    return standardized_df
 
 
 def calculate_event_statistics(events: List[Dict[str, Any]]) -> Dict[str, Any]:
