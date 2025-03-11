@@ -7,11 +7,9 @@ from datetime import datetime, timedelta
 import pycountry
 from typing import Dict, List, Any, Optional, Union, Tuple
 
-from utils.api import format_api_request, call_events_api, check_api_health
-
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.api import format_api_request, call_events_api
+from utils.api import format_api_request, call_events_api, check_api_health
 from utils.data_processing import events_to_dataframe, clean_event_data
 
 # Set page configuration
@@ -29,24 +27,25 @@ st.markdown(
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     .sub-header {
-        font-size: 1.5rem;
-        font-weight: 500;
+        font-size: 1.2rem;
+        font-weight: 400;
         color: #4d4d4d;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
     }
     .api-card {
         background-color: #f0f2f6;
         border-radius: 0.5rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
     .api-header {
         font-size: 1.2rem;
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     .code-block {
         background-color: #f8f9fa;
@@ -56,183 +55,182 @@ st.markdown(
         overflow-x: auto;
         margin-bottom: 1rem;
     }
+    .stExpander {
+        border: none !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        border-radius: 0.5rem;
+    }
+    .section-header {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
-# Main content
+# Main content - with merged subtitle instead of separate API Configuration card
 st.markdown('<div class="main-header">API Query Builder</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-header">Construct custom queries to the Events API</div>',
+    '<div class="sub-header">Configure custom queries to the Events API. You can filter tariff events by date range, countries, and other criteria using the parameters below.</div>',
     unsafe_allow_html=True,
 )
 
-# API configuration section
-with st.container():
-    st.markdown(
-        """
-    <div class="api-card">
-        <div class="api-header">API Configuration</div>
-        <p>
-            Configure your query parameters to fetch tariff events from the Events API.
-            You can filter by date range, countries, and other criteria.
-        </p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
+# Make Query Parameters collapsible
+with st.expander("Query Parameters", expanded=False):
+    col1, col2 = st.columns(2)
 
-# Query parameters form
-st.subheader("Query Parameters")
+    with col1:
+        # Date type selection
+        st.markdown("#### Date Selection")
+        date_type = st.radio(
+            "Select date type to filter by:",
+            ["Extraction Date", "Announcement Date", "Implementation Date"],
+        )
 
-col1, col2 = st.columns(2)
+        date_field = "extraction_date"
+        if date_type == "Announcement Date":
+            date_field = "tariffs_v2.announcement_date"
+        elif date_type == "Implementation Date":
+            date_field = "tariffs_v2.implementation_date"
 
-with col1:
-    # Date type selection
-    st.markdown("#### Date Selection")
-    date_type = st.radio(
-        "Select date type to filter by:",
-        ["Extraction Date", "Announcement Date", "Implementation Date"],
-    )
+        # Date range selection
+        date_option = st.radio(
+            "Select date range type:", ["Last N days", "Custom date range"]
+        )
 
-    date_field = "extraction_date"
-    if date_type == "Announcement Date":
-        date_field = "tariffs_v2.announcement_date"
-    elif date_type == "Implementation Date":
-        date_field = "tariffs_v2.implementation_date"
+        date_range = {}
+        if date_option == "Last N days":
+            days_ago = st.slider("Number of days to look back:", 1, 30, 1)
+            date_range = {"gte": f"now-{days_ago}d", "lte": "now"}
+        else:
+            col1a, col1b = st.columns(2)
+            with col1a:
+                start_date = st.date_input(
+                    "Start date:", datetime.now() - timedelta(days=30)
+                )
+            with col1b:
+                end_date = st.date_input("End date:", datetime.now())
 
-    # Date range selection
-    date_option = st.radio(
-        "Select date range type:", ["Last N days", "Custom date range"]
-    )
+            date_range = {
+                "gte": start_date.strftime("%Y-%m-%d"),
+                "lte": end_date.strftime("%Y-%m-%d"),
+            }
 
-    date_range = {}
-    if date_option == "Last N days":
-        days_ago = st.slider("Number of days to look back:", 1, 365, 30)
-        date_range = {"gte": f"now-{days_ago}d", "lte": "now"}
-    else:
-        col1a, col1b = st.columns(2)
-        with col1a:
-            start_date = st.date_input(
-                "Start date:", datetime.now() - timedelta(days=30)
+        # Event type - Currently only tariffs_v2 is supported
+        st.markdown("#### Event Type")
+        event_type = st.selectbox("Select event type:", ["tariffs_v2"], index=0)
+
+    with col2:
+        # Country selection
+        st.markdown("#### Countries")
+
+        # Get list of countries for the selector
+        countries = sorted(
+            [(country.alpha_2, country.name) for country in pycountry.countries],
+            key=lambda x: x[1],
+        )
+        countries.append(("EU", "European Union"))  # Add EU manually
+
+        country_options = [f"{code}: {name}" for code, name in countries]
+
+        # Country filter type
+        country_filter_type = st.radio(
+            "Filter by:", ["Imposing Country", "Targeted Country", "Both"]
+        )
+
+        # Imposing countries
+        imposing_countries = []
+        if country_filter_type in ["Imposing Country", "Both"]:
+            selected_imposing = st.multiselect(
+                "Select imposing countries (optional):",
+                options=country_options,
+                key="imposing_countries",
             )
-        with col1b:
-            end_date = st.date_input("End date:", datetime.now())
+            imposing_countries = [c.split(":")[0].strip() for c in selected_imposing]
 
-        date_range = {
-            "gte": start_date.strftime("%Y-%m-%d"),
-            "lte": end_date.strftime("%Y-%m-%d"),
-        }
+        # Targeted countries
+        targeted_countries = []
+        if country_filter_type in ["Targeted Country", "Both"]:
+            selected_targeted = st.multiselect(
+                "Select targeted countries (optional):",
+                options=country_options,
+                key="targeted_countries",
+            )
+            targeted_countries = [c.split(":")[0].strip() for c in selected_targeted]
 
-    # Event type - Currently only tariffs_v2 is supported
-    st.markdown("#### Event Type")
-    event_type = st.selectbox("Select event type:", ["tariffs_v2"], index=0)
-
-with col2:
-    # Country selection
-    st.markdown("#### Countries")
-
-    # Get list of countries for the selector
-    countries = sorted(
-        [(country.alpha_2, country.name) for country in pycountry.countries],
-        key=lambda x: x[1],
-    )
-    countries.append(("EU", "European Union"))  # Add EU manually
-
-    country_options = [f"{code}: {name}" for code, name in countries]
-
-    # Country filter type
-    country_filter_type = st.radio(
-        "Filter by:", ["Imposing Country", "Targeted Country", "Both"]
-    )
-
-    # Imposing countries
-    imposing_countries = []
-    if country_filter_type in ["Imposing Country", "Both"]:
-        selected_imposing = st.multiselect(
-            "Select imposing countries (optional):",
-            options=country_options,
-            key="imposing_countries",
-        )
-        imposing_countries = [c.split(":")[0].strip() for c in selected_imposing]
-
-    # Targeted countries
-    targeted_countries = []
-    if country_filter_type in ["Targeted Country", "Both"]:
-        selected_targeted = st.multiselect(
-            "Select targeted countries (optional):",
-            options=country_options,
-            key="targeted_countries",
-        )
-        targeted_countries = [c.split(":")[0].strip() for c in selected_targeted]
-
-    # Measure type selection
-    st.markdown("#### Measure Type")
-    measure_options = [
-        "new tariff",
-        "tariff increase",
-        "tariff reduction",
-        "retaliatory tariff",
-        "import ban",
-        "quota",
-        "other trade restriction",
-    ]
-    selected_measures = st.multiselect(
-        "Select measure types (optional):", options=measure_options
-    )
-
-    # Tariff rate range
-    st.markdown("#### Tariff Rate")
-    min_rate = st.slider("Minimum tariff rate (%):", 0, 100, 0)
-
-    # Keywords for summary search
-    st.markdown("#### Keywords in Summary")
-    keywords = st.text_input("Enter keywords to search in summary (space-separated):")
-
-    # Article data options
-    st.markdown("#### Article Data")
-    include_articles = st.checkbox("Include article data", value=True)
-
-    if include_articles:
-        st.markdown("##### Additional Article Fields")
-        article_field_options = [
-            "description",
-            "content",
-            "published_date",
-            "published_date_precision",
-            "author",
-            "authors",
-            "journalists",
-            "domain_url",
-            "full_domain_url",
-            "name_source",
-            "extraction_data.parent_url",
-            "is_headline",
-            "paid_content",
-            "rights",
-            "rank",
-            "is_opinion",
-            "language",
-            "word_count",
-            "twitter_account",
-            "all_links",
-            "all_domain_links",
-            "nlp.theme",
-            "nlp.summary",
-            "nlp.sentiment",
-            "nlp.ner_PER",
-            "nlp.ner_ORG",
-            "nlp.ner_MISC",
-            "nlp.ner_LOC",
+        # Measure type selection
+        st.markdown("#### Measure Type")
+        measure_options = [
+            "new tariff",
+            "tariff increase",
+            "tariff reduction",
+            "retaliatory tariff",
+            "import ban",
+            "quota",
+            "other trade restriction",
         ]
-        additional_article_fields = st.multiselect(
-            "Select additional article fields to include:",
-            options=article_field_options,
+        selected_measures = st.multiselect(
+            "Select measure types (optional):", options=measure_options
         )
+
+        # Tariff rate range
+        st.markdown("#### Tariff Rate")
+        min_rate = st.slider("Minimum tariff rate (%):", 0, 100, 0)
+
+        # Keywords for summary search
+        st.markdown("#### Keywords in Summary")
+        keywords = st.text_input(
+            "Enter keywords to search in summary (space-separated):"
+        )
+
+        # Article data options
+        st.markdown("#### Article Data")
+        include_articles = st.checkbox("Include article data", value=True)
+
+        if include_articles:
+            st.markdown("##### Additional Article Fields")
+            article_field_options = [
+                "description",
+                "content",
+                "published_date",
+                "published_date_precision",
+                "author",
+                "authors",
+                "journalists",
+                "domain_url",
+                "full_domain_url",
+                "name_source",
+                "extraction_data.parent_url",
+                "is_headline",
+                "paid_content",
+                "rights",
+                "rank",
+                "is_opinion",
+                "language",
+                "word_count",
+                "twitter_account",
+                "all_links",
+                "all_domain_links",
+                "nlp.theme",
+                "nlp.summary",
+                "nlp.sentiment",
+                "nlp.ner_PER",
+                "nlp.ner_ORG",
+                "nlp.ner_MISC",
+                "nlp.ner_LOC",
+            ]
+            additional_article_fields = st.multiselect(
+                "Select additional article fields to include:",
+                options=article_field_options,
+            )
 
 # Generate API request preview
-st.subheader("API Request Preview")
+st.markdown(
+    '<div class="section-header">API Request Preview</div>', unsafe_allow_html=True
+)
 
 # Format the request
 api_request = format_api_request(
@@ -264,7 +262,7 @@ if date_field != "extraction_date" and "additional_filters" in api_request:
 st.code(json.dumps(api_request, indent=2), language="json")
 
 # Execute API query
-st.subheader("Execute Query")
+st.markdown('<div class="section-header">Execute Query</div>', unsafe_allow_html=True)
 
 col1, col2 = st.columns([3, 1])
 
@@ -313,7 +311,9 @@ if query_button:
             api_result = call_events_api(api_request)
 
     # Display results
-    st.subheader("Query Results")
+    st.markdown(
+        '<div class="section-header">Query Results</div>', unsafe_allow_html=True
+    )
 
     if "error" in api_result:
         st.error(f"Error: {api_result['error']}")
@@ -399,4 +399,4 @@ if query_button:
 
 # Footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit • Data provided by Events API")
+st.markdown("Built with ❤️ using Streamlit • Data provided by NewsCatcher Events API")
