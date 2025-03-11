@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Add custom CSS
+# Add custom CSS for logo and about section
 st.markdown(
     """
 <style>
@@ -43,33 +43,52 @@ st.markdown(
         font-size: 1rem;
         color: #4d4d4d;
     }
+    .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: left;
+        font-family: monospace;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .about-section {
+        padding-top: 1rem;
+    }
+    section[data-testid="stSidebar"] > div:first-child {
+        padding-top: 0;
+    }
+    /* Hide hamburger menu */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+    [data-testid="collapsedControl"] {
+        display: none !important;
+    }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
-# Sidebar
-st.sidebar.image(
-    "https://www.newscatcherapi.com/static/media/NewsCatcher%20Full.0afd5f49.png",
-    width=200,
-)
-st.sidebar.title("Navigation")
-page = st.sidebar.radio(
-    "Select a page:",
-    ["Dashboard", "Event Explorer", "Industry Analysis", "API Query Builder"],
-)
+# Add logo to sidebar
+with st.sidebar:
+    # Logo as text
+    st.markdown(
+        '<div class="logo-text">&lt;/newscatcher&gt;</div>', unsafe_allow_html=True
+    )
 
-st.sidebar.markdown("---")
-st.sidebar.subheader("About")
-st.sidebar.info(
-    """
-    This app visualizes global tariff events extracted from news data.
-    
-    Built with Streamlit and powered by the Events API.
-    
-    © 2025 NewsCatcher Technologies
-    """
-)
+    # About section at the bottom of sidebar
+    st.markdown('<div class="about-section"></div>', unsafe_allow_html=True)
+    st.markdown("### About")
+    st.markdown(
+        """
+        This app visualizes global tariff events extracted from news data.
+        
+        Built with Streamlit and powered by the NewsCatcher Events API.
+        
+        © 2025 NewsCatcher Inc.
+        """
+    )
 
 
 # Load sample data
@@ -96,158 +115,128 @@ def load_sample_data() -> Dict[str, Any]:
 
 sample_data = load_sample_data()
 
-# Main content based on selected page
-if page == "Dashboard":
+# Main content
+st.markdown(
+    '<div class="main-header">Tariff Tracker Dashboard</div>',
+    unsafe_allow_html=True,
+)
+st.markdown(
+    '<div class="sub-header">Global overview of tariff events and trade policies</div>',
+    unsafe_allow_html=True,
+)
+
+# Sample metrics
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
     st.markdown(
-        '<div class="main-header">Tariff Tracker Dashboard</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="sub-header">Global overview of tariff events and trade policies</div>',
+        """
+    <div class="metric-card">
+        <div class="metric-value">{}</div>
+        <div class="metric-label">Total Events</div>
+    </div>
+    """.format(
+            sample_data.get("count", len(sample_data.get("events", [])))
+        ),
         unsafe_allow_html=True,
     )
 
-    # Sample metrics
-    col1, col2, col3, col4 = st.columns(4)
+with col2:
+    # Count unique imposing countries
+    imposing_countries = set()
+    for event in sample_data.get("events", []):
+        if "tariffs_v2" in event and "imposing_country_name" in event["tariffs_v2"]:
+            imposing_countries.add(event["tariffs_v2"]["imposing_country_name"])
 
-    with col1:
-        st.markdown(
-            """
-        <div class="metric-card">
-            <div class="metric-value">{}</div>
-            <div class="metric-label">Total Events</div>
-        </div>
-        """.format(
-                sample_data.get("count", len(sample_data.get("events", [])))
+    st.markdown(
+        """
+    <div class="metric-card">
+        <div class="metric-value">{}</div>
+        <div class="metric-label">Imposing Countries</div>
+    </div>
+    """.format(
+            len(imposing_countries)
+        ),
+        unsafe_allow_html=True,
+    )
+
+with col3:
+    # Count unique targeted countries
+    targeted_countries = set()
+    for event in sample_data.get("events", []):
+        if "tariffs_v2" in event and "targeted_country_names" in event["tariffs_v2"]:
+            for country in event["tariffs_v2"]["targeted_country_names"]:
+                targeted_countries.add(country)
+
+    st.markdown(
+        """
+    <div class="metric-card">
+        <div class="metric-value">{}</div>
+        <div class="metric-label">Targeted Countries</div>
+    </div>
+    """.format(
+            len(targeted_countries)
+        ),
+        unsafe_allow_html=True,
+    )
+
+with col4:
+    # Count unique products
+    products = set()
+    for event in sample_data.get("events", []):
+        if "tariffs_v2" in event and "affected_products" in event["tariffs_v2"]:
+            for product in event["tariffs_v2"]["affected_products"]:
+                products.add(product)
+
+    st.markdown(
+        """
+    <div class="metric-card">
+        <div class="metric-value">{}</div>
+        <div class="metric-label">Affected Products</div>
+    </div>
+    """.format(
+            len(products)
+        ),
+        unsafe_allow_html=True,
+    )
+
+# Global Tariff Heatmap
+st.subheader("Global Tariff Heatmap")
+map_type = st.radio(
+    "Select map type:", ["Imposing Countries", "Targeted Countries"], horizontal=True
+)
+
+st.info("World map visualization of tariff events will be implemented here")
+
+# Recent Tariff Events
+st.subheader("Recent Tariff Events")
+st.info("Event timeline visualization will be implemented here")
+
+# Latest Events table
+st.subheader("Latest Events")
+
+# Convert events to a more readable format for the table
+event_data = []
+for event in sample_data.get("events", [])[:5]:  # Show only the first 5 events
+    tariff_info = event.get("tariffs_v2", {})
+
+    event_data.append(
+        {
+            "Date": tariff_info.get("announcement_date", "N/A"),
+            "Imposing Country": tariff_info.get("imposing_country_name", "N/A"),
+            "Targeted Countries": ", ".join(
+                tariff_info.get("targeted_country_names", ["N/A"])
             ),
-            unsafe_allow_html=True,
-        )
-
-    with col2:
-        # Count unique imposing countries
-        imposing_countries = set()
-        for event in sample_data.get("events", []):
-            if "tariffs_v2" in event and "imposing_country_name" in event["tariffs_v2"]:
-                imposing_countries.add(event["tariffs_v2"]["imposing_country_name"])
-
-        st.markdown(
-            """
-        <div class="metric-card">
-            <div class="metric-value">{}</div>
-            <div class="metric-label">Imposing Countries</div>
-        </div>
-        """.format(
-                len(imposing_countries)
-            ),
-            unsafe_allow_html=True,
-        )
-
-    with col3:
-        # Count unique targeted countries
-        targeted_countries = set()
-        for event in sample_data.get("events", []):
-            if (
-                "tariffs_v2" in event
-                and "targeted_country_names" in event["tariffs_v2"]
-            ):
-                for country in event["tariffs_v2"]["targeted_country_names"]:
-                    targeted_countries.add(country)
-
-        st.markdown(
-            """
-        <div class="metric-card">
-            <div class="metric-value">{}</div>
-            <div class="metric-label">Targeted Countries</div>
-        </div>
-        """.format(
-                len(targeted_countries)
-            ),
-            unsafe_allow_html=True,
-        )
-
-    with col4:
-        # Count unique products
-        products = set()
-        for event in sample_data.get("events", []):
-            if "tariffs_v2" in event and "affected_products" in event["tariffs_v2"]:
-                for product in event["tariffs_v2"]["affected_products"]:
-                    products.add(product)
-
-        st.markdown(
-            """
-        <div class="metric-card">
-            <div class="metric-value">{}</div>
-            <div class="metric-label">Affected Products</div>
-        </div>
-        """.format(
-                len(products)
-            ),
-            unsafe_allow_html=True,
-        )
-
-    # Placeholder for visualizations
-    st.subheader("Recent Tariff Events")
-    st.info("Event timeline visualization will be implemented here")
-
-    st.subheader("Global Tariff Heatmap")
-    st.info("World map visualization of tariff events will be implemented here")
-
-    # Sample events table
-    st.subheader("Latest Events")
-
-    # Convert events to a more readable format for the table
-    event_data = []
-    for event in sample_data.get("events", [])[:5]:  # Show only the first 5 events
-        tariff_info = event.get("tariffs_v2", {})
-
-        event_data.append(
-            {
-                "Date": tariff_info.get("announcement_date", "N/A"),
-                "Imposing Country": tariff_info.get("imposing_country_name", "N/A"),
-                "Targeted Countries": ", ".join(
-                    tariff_info.get("targeted_country_names", ["N/A"])
-                ),
-                "Measure Type": tariff_info.get("measure_type", "N/A"),
-                "Main Rate": f"{tariff_info.get('main_tariff_rate', 'N/A')}%",
-                "Relevance": tariff_info.get("relevance_score", "N/A"),
-            }
-        )
-
-    if event_data:
-        st.table(event_data)
-    else:
-        st.warning("No events found in the sample data")
-
-elif page == "Event Explorer":
-    st.markdown('<div class="main-header">Event Explorer</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sub-header">Analyze individual tariff events in detail</div>',
-        unsafe_allow_html=True,
+            "Measure Type": tariff_info.get("measure_type", "N/A"),
+            "Main Rate": f"{tariff_info.get('main_tariff_rate', 'N/A')}%",
+            "Relevance": tariff_info.get("relevance_score", "N/A"),
+        }
     )
 
-    st.info("Detailed event exploration interface will be implemented here")
-
-elif page == "Industry Analysis":
-    st.markdown(
-        '<div class="main-header">Industry Analysis</div>', unsafe_allow_html=True
-    )
-    st.markdown(
-        '<div class="sub-header">Explore tariff impacts by industry and product categories</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.info("Industry analysis visualizations will be implemented here")
-
-elif page == "API Query Builder":
-    st.markdown(
-        '<div class="main-header">API Query Builder</div>', unsafe_allow_html=True
-    )
-    st.markdown(
-        '<div class="sub-header">Construct custom queries to the Events API</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.info("API query interface will be implemented here")
+if event_data:
+    st.table(event_data)
+else:
+    st.warning("No events found in the sample data")
 
 # Footer
 st.markdown("---")
