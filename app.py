@@ -156,7 +156,7 @@ with st.container():
         """
         <div class="action-card">
             <div class="action-title">Get Started</div>
-            <p>View the most recent tariff events or use the API Console to customize your search.</p>
+            <p>View the most recent tariff events or use the API Query Builder to customize your search.</p>
         </div>
         """,
         unsafe_allow_html=True,
