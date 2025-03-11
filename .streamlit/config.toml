@@ -10,3 +10,10 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+[ui]
+hideTopBar = true
+
+[pages]
+# This will prevent displaying the app.py file in the navigation
+hideSidebarNav = true
