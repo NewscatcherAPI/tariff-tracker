@@ -166,7 +166,14 @@ with st.container():
     col1, col2 = st.columns(2)
 
     with col1:
-        days_to_look_back = st.slider("Days to look back:", 1, 30, 1)
+        hours_to_look_back = st.slider(
+            "Hours to look back:",
+            min_value=6,
+            max_value=48,
+            value=24,
+            step=6,
+            help="Select how many hours of data to fetch",
+        )
 
     with col2:
         # Add a fetch button
@@ -180,7 +187,7 @@ processed_events = []
 if fetch_data:
     with st.spinner("Fetching recent tariff events..."):
         # Format the request parameters
-        date_range = {"gte": f"now-{days_to_look_back}d", "lte": "now"}
+        date_range = {"gte": f"now-{hours_to_look_back}h", "lte": "now"}
         api_request = format_api_request(
             event_type="tariffs_v2",
             extraction_date_range=date_range,
