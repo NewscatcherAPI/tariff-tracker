@@ -27,24 +27,25 @@ st.markdown(
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     .sub-header {
-        font-size: 1.5rem;
-        font-weight: 500;
+        font-size: 1.2rem;
+        font-weight: 400;
         color: #4d4d4d;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
     }
     .api-card {
         background-color: #f0f2f6;
         border-radius: 0.5rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
     .api-header {
         font-size: 1.2rem;
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     .code-block {
         background-color: #f8f9fa;
@@ -59,37 +60,26 @@ st.markdown(
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         border-radius: 0.5rem;
     }
+    .section-header {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
-# Main content
+# Main content - with merged subtitle instead of separate API Configuration card
 st.markdown('<div class="main-header">API Query Builder</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-header">Construct custom queries to the Events API</div>',
+    '<div class="sub-header">Configure custom queries to the Events API. You can filter tariff events by date range, countries, and other criteria using the parameters below.</div>',
     unsafe_allow_html=True,
 )
 
-# API configuration section
-with st.container():
-    st.markdown(
-        """
-    <div class="api-card">
-        <div class="api-header">API Configuration</div>
-        <p>
-            Configure your query parameters to fetch tariff events from the Events API.
-            You can filter by date range, countries, and other criteria.
-        </p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-
 # Make Query Parameters collapsible
 with st.expander("Query Parameters", expanded=False):
-    st.subheader("Query Parameters")
-
     col1, col2 = st.columns(2)
 
     with col1:
@@ -238,7 +228,9 @@ with st.expander("Query Parameters", expanded=False):
             )
 
 # Generate API request preview
-st.subheader("API Request Preview")
+st.markdown(
+    '<div class="section-header">API Request Preview</div>', unsafe_allow_html=True
+)
 
 # Format the request
 api_request = format_api_request(
@@ -270,7 +262,7 @@ if date_field != "extraction_date" and "additional_filters" in api_request:
 st.code(json.dumps(api_request, indent=2), language="json")
 
 # Execute API query
-st.subheader("Execute Query")
+st.markdown('<div class="section-header">Execute Query</div>', unsafe_allow_html=True)
 
 col1, col2 = st.columns([3, 1])
 
@@ -319,7 +311,9 @@ if query_button:
             api_result = call_events_api(api_request)
 
     # Display results
-    st.subheader("Query Results")
+    st.markdown(
+        '<div class="section-header">Query Results</div>', unsafe_allow_html=True
+    )
 
     if "error" in api_result:
         st.error(f"Error: {api_result['error']}")
