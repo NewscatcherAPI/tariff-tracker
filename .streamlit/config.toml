@@ -12,8 +12,8 @@ runOnSave = true
 gatherUsageStats = false
 
 [ui]
-hideTopBar = true
+hideTopBar = false
 
 [pages]
-# This will prevent displaying the app.py file in the navigation
-hideSidebarNav = true
+# Keep the page names in the navigation
+hideSidebarNav = false
