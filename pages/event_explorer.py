@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import os
 import sys
+from urllib.parse import urlparse
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -73,10 +74,23 @@ st.markdown(
         background-color: #06d6a0;
         color: white;
     }
+    .article-links {
+        margin-top: 1rem;
+    }
     .article-link {
         display: block;
         margin-top: 0.5rem;
         font-size: 0.9rem;
+    }
+    .article-source {
+        color: #6c757d;
+        font-size: 0.85rem;
+        font-style: italic;
+    }
+    .sources-heading {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
     }
 </style>
 """,
@@ -98,6 +112,19 @@ def load_sample_data():
     except json.JSONDecodeError:
         st.error("Error parsing the sample data file")
         return {"events": []}
+
+
+# Helper function to extract domain from URL
+def extract_domain(url):
+    try:
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc
+        # Remove 'www.' if present
+        if domain.startswith("www."):
+            domain = domain[4:]
+        return domain
+    except:
+        return "Unknown source"
 
 
 sample_data = load_sample_data()
@@ -185,27 +212,71 @@ if filtered_events:
 
     for event in filtered_events:
         with st.container():
-            st.markdown(
-                f"""
+            # Format affected products as comma-separated string
+            affected_products = (
+                ", ".join(event["affected_products"])
+                if isinstance(event["affected_products"], list)
+                and event["affected_products"]
+                else "N/A"
+            )
+
+            # Format tariff rates as comma-separated string
+            tariff_rates = (
+                ", ".join(event["tariff_rates"])
+                if isinstance(event["tariff_rates"], list) and event["tariff_rates"]
+                else "N/A"
+            )
+
+            # Format industries as comma-separated string
+            industries = (
+                ", ".join(event["affected_industries"])
+                if isinstance(event["affected_industries"], list)
+                and event["affected_industries"]
+                else "N/A"
+            )
+
+            # Format targeted countries
+            targeted_countries = (
+                ", ".join(event["targeted_countries"])
+                if isinstance(event["targeted_countries"], list)
+                and event["targeted_countries"]
+                else "N/A"
+            )
+
+            # Prepare article links HTML with consistent formatting
+            article_links_html = ""
+            if event.get("articles") and len(event["articles"]) > 0:
+                article_links_html = (
+                    '<div class="article-links"><p class="sources-heading">Sources:</p>'
+                )
+
+                for article in event["articles"]:
+                    if article.get("link") and article.get("title"):
+                        domain = extract_domain(article["link"])
+                        article_links_html += f'<a href="{article["link"]}" target="_blank" class="article-link">{article["title"]} <span class="article-source">({domain})</span></a>'
+
+                article_links_html += "</div>"
+
+            # Create the event card with proper HTML rendering
+            event_card_html = f"""
             <div class="event-card">
-                <div class="event-title">{event['imposing_country']} → {', '.join(event['targeted_countries'])}</div>
+                <div class="event-title">{event['imposing_country']} → {targeted_countries}</div>
                 <div class="event-meta">
                     {event['announcement_date']} • {event['measure_type']} • 
                     <span class="tag tag-{event['relevance_score'].lower() if event['relevance_score'] else 'medium'}">{event['relevance_score']}</span>
                 </div>
                 <div class="event-summary">{event['summary']}</div>
                 <div class="event-details">
-                    <strong>Affected Products:</strong> {', '.join(event['affected_products']) if event['affected_products'] else 'N/A'}<br>
-                    <strong>Tariff Rates:</strong> {', '.join(event['tariff_rates']) if event['tariff_rates'] else 'N/A'}<br>
+                    <strong>Affected Products:</strong> {affected_products}<br>
+                    <strong>Tariff Rates:</strong> {tariff_rates}<br>
                     <strong>Implementation Date:</strong> {event['implementation_date'] if event['implementation_date'] else 'Not specified'}<br>
-                    <strong>Industries:</strong> {', '.join(event['affected_industries']) if event['affected_industries'] else 'N/A'}<br>
+                    <strong>Industries:</strong> {industries}<br>
                 </div>
-                
-                {f'<div class="article-links"><strong>Sources:</strong><br>' + '<br>'.join([f'<a href="{article["link"]}" target="_blank" class="article-link">{article["title"]}</a>' for article in event["articles"]]) + '</div>' if event['articles'] else ''}
+                {article_links_html}
             </div>
-            """,
-                unsafe_allow_html=True,
-            )
+            """
+
+            st.markdown(event_card_html, unsafe_allow_html=True)
 
         # Add expand/collapse for full details if needed
         with st.expander("Show full details"):
@@ -213,40 +284,62 @@ if filtered_events:
 
             with col1:
                 st.markdown("#### Key Information")
-                st.markdown(f"**Event ID:** {event['id']}")
-                st.markdown(f"**Extraction Date:** {event['extraction_date']}")
-                st.markdown(f"**Event Type:** {event['event_type']}")
-                st.markdown(f"**Global Event Type:** {event['global_event_type']}")
+                st.markdown(f"**Event ID:** {event.get('id', 'N/A')}")
+                st.markdown(
+                    f"**Extraction Date:** {event.get('extraction_date', 'N/A')}"
+                )
+                st.markdown(f"**Event Type:** {event.get('event_type', 'N/A')}")
+                st.markdown(
+                    f"**Global Event Type:** {event.get('global_event_type', 'N/A')}"
+                )
 
                 st.markdown("#### Countries")
                 st.markdown(
-                    f"**Imposing Country:** {event['imposing_country']} ({event['imposing_country_code']})"
+                    f"**Imposing Country:** {event.get('imposing_country', 'N/A')} ({event.get('imposing_country_code', 'N/A')})"
                 )
-                st.markdown(
-                    f"**Targeted Countries:** {', '.join(event['targeted_countries'])}"
+                st.markdown(f"**Targeted Countries:** {targeted_countries}")
+                targeted_codes = (
+                    ", ".join(event["targeted_country_codes"])
+                    if isinstance(event["targeted_country_codes"], list)
+                    and event["targeted_country_codes"]
+                    else "N/A"
                 )
-                st.markdown(
-                    f"**Targeted Country Codes:** {', '.join(event['targeted_country_codes'])}"
-                )
+                st.markdown(f"**Targeted Country Codes:** {targeted_codes}")
 
             with col2:
                 st.markdown("#### Tariff Details")
-                st.markdown(f"**Measure Type:** {event['measure_type']}")
-                st.markdown(f"**Main Tariff Rate:** {event['main_tariff_rate']}")
-                st.markdown(f"**Announcement Date:** {event['announcement_date']}")
-                st.markdown(f"**Implementation Date:** {event['implementation_date']}")
+                st.markdown(f"**Measure Type:** {event.get('measure_type', 'N/A')}")
                 st.markdown(
-                    f"**Expiration Date:** {event['expiration_date'] if event['expiration_date'] else 'Not specified'}"
+                    f"**Main Tariff Rate:** {event.get('main_tariff_rate', 'N/A')}"
                 )
                 st.markdown(
-                    f"**Policy Objective:** {event['policy_objective'] if event['policy_objective'] else 'Not specified'}"
+                    f"**Announcement Date:** {event.get('announcement_date', 'N/A')}"
                 )
                 st.markdown(
-                    f"**Legal Basis:** {event['legal_basis'] if event['legal_basis'] else 'Not specified'}"
+                    f"**Implementation Date:** {event.get('implementation_date', 'N/A')}"
                 )
+                st.markdown(
+                    f"**Expiration Date:** {event.get('expiration_date', 'Not specified') if event.get('expiration_date') else 'Not specified'}"
+                )
+                st.markdown(
+                    f"**Policy Objective:** {event.get('policy_objective', 'Not specified') if event.get('policy_objective') else 'Not specified'}"
+                )
+                st.markdown(
+                    f"**Legal Basis:** {event.get('legal_basis', 'Not specified') if event.get('legal_basis') else 'Not specified'}"
+                )
+
+                # Display article sources in the expander as well
+                if event.get("articles") and len(event["articles"]) > 0:
+                    st.markdown("#### Sources")
+                    for article in event["articles"]:
+                        if article.get("link") and article.get("title"):
+                            domain = extract_domain(article["link"])
+                            st.markdown(
+                                f"- [{article['title']} ({domain})]({article['link']})"
+                            )
 else:
     st.info("No events match the selected filters. Try adjusting your filter criteria.")
 
 # Footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit • Data provided by Events API")
+st.markdown("Built with ❤️ using Streamlit • Data provided by NewsCatcher Events API")
