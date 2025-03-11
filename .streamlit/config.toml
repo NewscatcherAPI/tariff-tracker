@@ -10,3 +10,10 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+[ui]
+hideTopBar = false
+
+[pages]
+# Keep the page names in the navigation
+hideSidebarNav = false
