@@ -76,11 +76,8 @@ def clean_event_data(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 prod.strip() for prod in affected_products.split(",") if prod.strip()
             ]
 
+        # No processing of HS categories - use as is
         hs_product_categories = tariff_data.get("hs_product_categories", [])
-        if isinstance(hs_product_categories, str):
-            hs_product_categories = [
-                cat.strip() for cat in hs_product_categories.split(",") if cat.strip()
-            ]
 
         tariff_rates = tariff_data.get("tariff_rates", [])
         if isinstance(tariff_rates, str):
@@ -237,22 +234,34 @@ def events_to_dataframe(events: List[Dict[str, Any]]) -> pd.DataFrame:
         for col in df.columns:
             if df[col].apply(lambda x: isinstance(x, list)).any():
                 print(f"Converting list column to string: {col}")
-                df[col] = df[col].apply(
-                    lambda x: (
-                        ", ".join(
-                            [
-                                (
-                                    str(item)
-                                    if not isinstance(item, dict)
-                                    else str(item.get("name", str(item)))
-                                )
-                                for item in x
-                            ]
+
+                # Special handling for hs_product_categories to keep them intact
+                if col == "hs_product_categories":
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            ", ".join([str(item) for item in x])
+                            if isinstance(x, list)
+                            else x
                         )
-                        if isinstance(x, list)
-                        else x
                     )
-                )
+                else:
+                    # Regular handling for other list columns
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            ", ".join(
+                                [
+                                    (
+                                        str(item)
+                                        if not isinstance(item, dict)
+                                        else str(item.get("name", str(item)))
+                                    )
+                                    for item in x
+                                ]
+                            )
+                            if isinstance(x, list)
+                            else x
+                        )
+                    )
 
         return df
     except Exception as e:
@@ -374,9 +383,6 @@ def get_country_name(country_code: str) -> str:
         pass
 
     return country_code
-
-
-# Improved load_country_codes function for utils/data_processing.py
 
 
 def load_country_codes() -> Dict[str, str]:
