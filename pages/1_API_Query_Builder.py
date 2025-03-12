@@ -9,8 +9,13 @@ from typing import Dict, List, Any, Optional, Union, Tuple
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.api import format_api_request, call_events_api, check_api_health
+from utils.api import format_api_request, call_events_api, check_api_health, get_api_key
 from utils.data_processing import events_to_dataframe, clean_event_data
+from utils.data_manager import (
+    get_session_events_data,
+    initialize_session_data,
+    update_session_data_with_custom_query,
+)
 
 # Set page configuration
 st.set_page_config(
@@ -71,11 +76,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Initialize data if needed
+if "events_initialized" not in st.session_state:
+    with st.spinner("Loading initial data..."):
+        initialize_session_data()
+
 # Main content - with merged subtitle instead of separate API Configuration card
 st.markdown('<div class="main-header">API Query Builder</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="sub-header">Configure custom queries to the Events API. You can filter tariff events by date range, countries, and other criteria using the parameters below.</div>',
     unsafe_allow_html=True,
+)
+
+# Add option to use query results as the main dataset
+st.sidebar.markdown("### Use Results")
+use_query_for_app = st.sidebar.checkbox(
+    "Make query results the active dataset for the entire app",
+    help="If checked, your query results will be stored and used in all pages of the app.",
 )
 
 # Make Query Parameters collapsible
@@ -277,15 +294,13 @@ if query_button:
     with st.spinner("Querying Events API..."):
         # First check API health
         use_sample = False
-        api_key = None
-
-        try:
-            api_key = st.secrets.get("api", {}).get("key")
-        except:
-            use_sample = True
+        api_key = get_api_key()
 
         if not api_key:
             use_sample = True
+            st.warning(
+                "⚠️ Using sample data because no API key is configured. Add your API key to Streamlit secrets for live data."
+            )
 
         if not use_sample:
             # Check API health
@@ -299,103 +314,109 @@ if query_button:
                 )
 
         if use_sample:
-            st.warning(
-                "⚠️ Using sample data because no API key is configured or API is not available. For live data, add your API key to Streamlit secrets."
-            )
-
             # Load sample data
             with open(os.path.join("data", "sample_tariff_events.json"), "r") as file:
                 api_result = json.load(file)
         else:
             # Call the actual API
-            api_result = call_events_api(api_request)
+            api_result = call_events_api(api_request, api_key)
+
+            # Check if there was an error
+            if "error" in api_result:
+                st.error(f"Error: {api_result['error']}")
+                if "details" in api_result:
+                    st.code(api_result["details"])
+                # Fall back to sample data
+                st.warning("Falling back to sample data.")
+                with open(
+                    os.path.join("data", "sample_tariff_events.json"), "r"
+                ) as file:
+                    api_result = json.load(file)
 
     # Display results
     st.markdown(
         '<div class="section-header">Query Results</div>', unsafe_allow_html=True
     )
 
-    if "error" in api_result:
-        st.error(f"Error: {api_result['error']}")
-        if "details" in api_result:
-            st.code(api_result["details"])
-    else:
-        st.success(
-            f"Query successful! Retrieved {api_result.get('count', len(api_result.get('events', [])))} events."
-        )
+    # Process results
+    events = api_result.get("events", [])
 
-        # Process results
-        events = api_result.get("events", [])
-        if events:
-            # Create DataFrame
-            events_df = events_to_dataframe(events)
+    if events:
+        st.success(f"Query successful! Retrieved {len(events)} events.")
 
-            # Display summary
-            st.markdown("#### Results Overview")
+        # Update session state if checkbox is checked
+        if use_query_for_app:
+            update_session_data_with_custom_query(api_result)
+            st.success(
+                "✅ Query results have been set as the active dataset for all pages."
+            )
 
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Total Events", len(events))
+        # Create DataFrame
+        processed_events = clean_event_data(events)
+        events_df = events_to_dataframe(processed_events)
 
-            with col2:
-                imposing_countries = set()
-                for event in events:
-                    if (
-                        "tariffs_v2" in event
-                        and "imposing_country_name" in event["tariffs_v2"]
-                    ):
-                        imposing_countries.add(
-                            event["tariffs_v2"]["imposing_country_name"]
-                        )
-                st.metric("Imposing Countries", len(imposing_countries))
+        # Display summary
+        st.markdown("#### Results Overview")
 
-            with col3:
-                targeted_countries = set()
-                for event in events:
-                    if (
-                        "tariffs_v2" in event
-                        and "targeted_country_names" in event["tariffs_v2"]
-                    ):
-                        for country in event["tariffs_v2"]["targeted_country_names"]:
-                            targeted_countries.add(country)
-                st.metric("Targeted Countries", len(targeted_countries))
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Events", len(events))
 
-            # Display events table
-            st.markdown("#### Events Table")
+        with col2:
+            imposing_countries = set()
+            for event in events:
+                if (
+                    "tariffs_v2" in event
+                    and "imposing_country_name" in event["tariffs_v2"]
+                ):
+                    imposing_countries.add(event["tariffs_v2"]["imposing_country_name"])
+            st.metric("Imposing Countries", len(imposing_countries))
 
-            # Select columns to display
-            if not events_df.empty:
-                display_cols = [
-                    "announcement_date",
-                    "imposing_country",
-                    "targeted_countries",
-                    "measure_type",
-                    "main_tariff_rate",
-                    "relevance_score",
-                    "summary",
-                ]
-                existing_cols = [
-                    col for col in display_cols if col in events_df.columns
-                ]
+        with col3:
+            targeted_countries = set()
+            for event in events:
+                if (
+                    "tariffs_v2" in event
+                    and "targeted_country_names" in event["tariffs_v2"]
+                ):
+                    for country in event["tariffs_v2"]["targeted_country_names"]:
+                        targeted_countries.add(country)
+            st.metric("Targeted Countries", len(targeted_countries))
 
-                st.dataframe(events_df[existing_cols], use_container_width=True)
+        # Display events table
+        st.markdown("#### Events Table")
 
-                # Option to download results
-                csv = events_df.to_csv(index=False).encode("utf-8")
-                st.download_button(
-                    label="Download results as CSV",
-                    data=csv,
-                    file_name=f"tariff_events_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                    mime="text/csv",
-                )
+        # Select columns to display
+        if not events_df.empty:
+            display_cols = [
+                "announcement_date",
+                "imposing_country",
+                "targeted_countries",
+                "measure_type",
+                "main_tariff_rate",
+                "relevance_score",
+                "summary",
+            ]
+            existing_cols = [col for col in display_cols if col in events_df.columns]
 
-                # Raw response
-                with st.expander("View raw API response"):
-                    st.code(json.dumps(api_result, indent=2), language="json")
-            else:
-                st.warning("No events found in the API response.")
+            st.dataframe(events_df[existing_cols], use_container_width=True)
+
+            # Option to download results
+            csv = events_df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="Download results as CSV",
+                data=csv,
+                file_name=f"tariff_events_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                mime="text/csv",
+            )
+
+            # Raw response
+            with st.expander("View raw API response"):
+                st.code(json.dumps(api_result, indent=2), language="json")
         else:
             st.warning("No events found in the API response.")
+    else:
+        st.warning("No events found in the API response.")
 
 # Footer
 st.markdown("---")
