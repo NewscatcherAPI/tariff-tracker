@@ -109,8 +109,9 @@ with st.sidebar:
     # Add data refresh options
     st.subheader("Data Options")
 
-    # Debug mode toggle for development
-    debug_mode = st.checkbox("Enable debug mode", key="debug_mode")
+    # Set debug mode as a session state variable but don't show in UI
+    if "debug_mode" not in st.session_state:
+        st.session_state.debug_mode = False
 
     if st.button("Refresh Data"):
         initialize_session_data(force_refresh=True)
@@ -261,28 +262,11 @@ if processed_events:
         horizontal=True,
     )
 
-    # Add simple debug info for map data when debug mode is enabled
-    if st.session_state.get("debug_mode", False):
-        with st.expander("Map Debug Information"):
-            st.write("#### Basic Debug Information")
-            st.write(f"DataFrame shape: {events_df.shape}")
-            st.write(f"DataFrame columns: {events_df.columns.tolist()}")
-
-            if "imposing_country_code" in events_df.columns:
-                st.write(
-                    f"Unique imposing country codes: {events_df['imposing_country_code'].unique().tolist()}"
-                )
-
-            if "targeted_country_codes" in events_df.columns:
-                st.write("First few targeted country codes:")
-                for i, row in events_df.head(3).iterrows():
-                    st.write(f"Row {i}: {row.get('targeted_country_codes')}")
-
-    # Create the map visualization
+    # Create the map visualization (use debug mode from session state)
     map_fig = create_world_map(
         events_df,
         "imposing" if map_type == "Imposing Countries" else "targeted",
-        debug=st.session_state.get("debug_mode", False),
+        debug=st.session_state.debug_mode,
     )
 
     if map_fig:
