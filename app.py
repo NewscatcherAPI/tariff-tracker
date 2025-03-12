@@ -10,13 +10,15 @@ from typing import Dict, List, Any, Optional
 import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils.data_processing import (
-    clean_event_data,
-    events_to_dataframe,
-    calculate_event_statistics,
-)
-from utils.api import format_api_request, call_events_api, get_api_key
+
 from utils.visualization import create_world_map, create_industry_chart
+from utils.data_manager import (
+    initialize_session_data,
+    get_session_events_data,
+    fetch_tariff_events,
+    process_events_data,
+    get_events_statistics,
+)
 
 # Set page configuration
 st.set_page_config(
@@ -104,6 +106,19 @@ with st.sidebar:
         '<div class="logo-text">&lt;/newscatcher&gt;</div>', unsafe_allow_html=True
     )
 
+    # Add data refresh options
+    st.subheader("Data Options")
+
+    if st.button("Refresh Data"):
+        initialize_session_data(force_refresh=True)
+        st.success("Data refreshed successfully!")
+
+    # Show last update time if available
+    if "last_update_time" in st.session_state:
+        st.info(
+            f"Last updated: {st.session_state.last_update_time.strftime('%Y-%m-%d %H:%M')}"
+        )
+
     # About section at the bottom of sidebar
     st.markdown('<div class="about-section"></div>', unsafe_allow_html=True)
     st.markdown("### About")
@@ -116,29 +131,6 @@ with st.sidebar:
         © 2025 NewsCatcher Inc.
         """
     )
-
-
-# Load sample data for initial display
-@st.cache_data
-def load_sample_data() -> Dict[str, Any]:
-    """
-    Load sample tariff events data from JSON file.
-
-    Returns:
-        Dict containing events data or empty dict if file not found
-    """
-    file_path = os.path.join("data", "sample_tariff_events.json")
-    try:
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    except FileNotFoundError:
-        st.error(f"Sample data file not found at {file_path}")
-        return {"events": []}
-    except json.JSONDecodeError:
-        st.error("Error parsing the sample data file")
-        return {"events": []}
-
 
 # Main content
 st.markdown(
@@ -179,160 +171,137 @@ with st.container():
         # Add a fetch button
         fetch_data = st.button("Fetch Recent Events", type="primary")
 
-# If the fetch button is pressed, call the API
-api_result = None
-events_df = pd.DataFrame()
-processed_events = []
-
+# If the fetch button is pressed, fetch new data
 if fetch_data:
     with st.spinner("Fetching recent tariff events..."):
-        # Format the request parameters
-        date_range = {"gte": f"now-{hours_to_look_back}h", "lte": "now"}
-        api_request = format_api_request(
-            event_type="tariffs_v2",
-            extraction_date_range=date_range,
-            include_articles=True,
+        # Fetch the data with the specified time range
+        api_result = fetch_tariff_events(hours_to_look_back=hours_to_look_back)
+
+        # Process the data and update session state
+        processed_events, events_df = process_events_data(api_result)
+        stats = get_events_statistics(processed_events)
+
+        # Update session state
+        st.session_state.api_result = api_result
+        st.session_state.processed_events = processed_events
+        st.session_state.events_df = events_df
+        st.session_state.stats = stats
+        st.session_state.events_initialized = True
+        st.session_state.last_update_time = datetime.now()
+
+        st.success(
+            f"Successfully fetched {len(processed_events)} events from the past {hours_to_look_back} hours!"
         )
-
-        # Check if API key is available
-        api_key = get_api_key()
-        if not api_key:
-            st.warning(
-                "⚠️ Using sample data because no API key is configured. Add your API key to Streamlit secrets for live data."
-            )
-            sample_data = load_sample_data()
-            api_result = sample_data
-        else:
-            # Call the actual API
-            api_result = call_events_api(api_request, api_key)
-
-            # Check if there was an error
-            if "error" in api_result:
-                st.error(f"Error: {api_result['error']}")
-                if "details" in api_result:
-                    st.code(api_result["details"])
-                # Fall back to sample data
-                st.warning("Falling back to sample data.")
-                sample_data = load_sample_data()
-                api_result = sample_data
 else:
-    # Load sample data for initial view
-    sample_data = load_sample_data()
-    api_result = sample_data
+    # Initialize data if needed
+    if "events_initialized" not in st.session_state:
+        with st.spinner("Loading initial data..."):
+            initialize_session_data()
 
-# Process the results
-if api_result and "events" in api_result:
-    events = api_result.get("events", [])
+# Get the current data from session state
+api_result, processed_events, events_df, stats = get_session_events_data()
 
-    if events:
-        # Clean and process events
-        processed_events = clean_event_data(events)
-        events_df = events_to_dataframe(processed_events)
+# Display metrics if we have data
+if processed_events:
+    # Display metrics
+    col1, col2, col3, col4 = st.columns(4)
 
-        # Calculate statistics
-        stats = calculate_event_statistics(processed_events)
-
-        # Display metrics
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            st.markdown(
-                f"""
-                <div class="metric-card">
-                    <div class="metric-value">{stats['total_events']}</div>
-                    <div class="metric-label">Total Events</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        with col2:
-            st.markdown(
-                f"""
-                <div class="metric-card">
-                    <div class="metric-value">{len(stats['imposing_countries'])}</div>
-                    <div class="metric-label">Imposing Countries</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        with col3:
-            st.markdown(
-                f"""
-                <div class="metric-card">
-                    <div class="metric-value">{len(stats['targeted_countries'])}</div>
-                    <div class="metric-label">Targeted Countries</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        with col4:
-            st.markdown(
-                f"""
-                <div class="metric-card">
-                    <div class="metric-value">{len(stats['affected_products'])}</div>
-                    <div class="metric-label">Affected Products</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        # Simple visualization
-        st.subheader("Global Tariff Heatmap")
-        map_type = st.radio(
-            "Select map type:",
-            ["Imposing Countries", "Targeted Countries"],
-            horizontal=True,
+    with col1:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-value">{stats['total_events']}</div>
+                <div class="metric-label">Total Events</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
-        # Create the map visualization
-        map_fig = create_world_map(
-            events_df, "imposing" if map_type == "Imposing Countries" else "targeted"
+    with col2:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-value">{len(stats['imposing_countries'])}</div>
+                <div class="metric-label">Imposing Countries</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
-        if map_fig:
-            st.plotly_chart(map_fig, use_container_width=True)
-        else:
-            st.info("Not enough data to create the map visualization.")
+    with col3:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-value">{len(stats['targeted_countries'])}</div>
+                <div class="metric-label">Targeted Countries</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-        # Display recent events table
-        st.subheader("Recent Tariff Events")
+    with col4:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div class="metric-value">{len(stats['affected_products'])}</div>
+                <div class="metric-label">Affected Products</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-        if not events_df.empty:
-            # Show only essential columns for the table view
-            display_cols = [
-                "announcement_date",
-                "imposing_country",
-                "targeted_countries",
-                "measure_type",
-                "main_tariff_rate",
-                "relevance_score",
-            ]
+    # Simple visualization
+    st.subheader("Global Tariff Heatmap")
+    map_type = st.radio(
+        "Select map type:",
+        ["Imposing Countries", "Targeted Countries"],
+        horizontal=True,
+    )
 
-            # Filter for display columns that actually exist in the dataframe
-            existing_cols = [col for col in display_cols if col in events_df.columns]
+    # Create the map visualization
+    map_fig = create_world_map(
+        events_df, "imposing" if map_type == "Imposing Countries" else "targeted"
+    )
 
-            # Display table
-            st.dataframe(events_df[existing_cols], use_container_width=True)
-
-            # Option to download results
-            csv = events_df.to_csv(index=False).encode("utf-8")
-            st.download_button(
-                label="Download as CSV",
-                data=csv,
-                file_name=f"tariff_events_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                mime="text/csv",
-            )
-
-            # Option to view raw JSON
-            with st.expander("View raw API response"):
-                st.code(json.dumps(api_result, indent=2), language="json")
-        else:
-            st.warning("No events found in the data")
+    if map_fig:
+        st.plotly_chart(map_fig, use_container_width=True)
     else:
-        st.warning("No events found in the API response")
+        st.info("Not enough data to create the map visualization.")
+
+    # Display recent events table
+    st.subheader("Recent Tariff Events")
+
+    if not events_df.empty:
+        # Show only essential columns for the table view
+        display_cols = [
+            "announcement_date",
+            "imposing_country",
+            "targeted_countries",
+            "measure_type",
+            "main_tariff_rate",
+            "relevance_score",
+        ]
+
+        # Filter for display columns that actually exist in the dataframe
+        existing_cols = [col for col in display_cols if col in events_df.columns]
+
+        # Display table
+        st.dataframe(events_df[existing_cols], use_container_width=True)
+
+        # Option to download results
+        csv = events_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="Download as CSV",
+            data=csv,
+            file_name=f"tariff_events_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv",
+        )
+
+        # Option to view raw JSON
+        with st.expander("View raw API response"):
+            st.code(json.dumps(api_result, indent=2), language="json")
+    else:
+        st.warning("No events found in the data")
 else:
     st.error("Failed to load data. Please check the API connection or sample data.")
 
