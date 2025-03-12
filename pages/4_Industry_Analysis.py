@@ -257,11 +257,16 @@ else:
 st.subheader("Product Category Analysis")
 
 if not events_df.empty and "hs_product_categories" in events_df.columns:
-    # Extract all HS categories
+    # Extract all HS categories - keeping categories intact without splitting
     all_categories = []
-    for cat_str in events_df["hs_product_categories"]:
-        if isinstance(cat_str, str) and cat_str:
-            all_categories.extend([cat.strip() for cat in cat_str.split(",")])
+
+    for event in events:
+        categories = event.get("hs_product_categories", [])
+        if isinstance(categories, list):
+            all_categories.extend(categories)
+        elif isinstance(categories, str):
+            # If it's already a string (from DataFrame conversion), add it directly
+            all_categories.append(categories)
 
     # Count occurrences of each category
     category_counts = pd.Series(all_categories).value_counts().reset_index()
@@ -294,4 +299,4 @@ else:
 
 # Footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit • Data provided by Events API")
+st.markdown("Built with ❤️ using Streamlit • Data provided by NewsCatcher Events API")
