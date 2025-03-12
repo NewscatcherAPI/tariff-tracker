@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
 import altair as alt
+import os
 from typing import Optional, Dict, List, Any, Union
 
 
+@st.cache_data
 def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
     """
     Create a timeline visualization of tariff events.
@@ -155,6 +157,7 @@ def create_event_timeline(events_df: pd.DataFrame) -> Optional[go.Figure]:
     return fig
 
 
+@st.cache_data
 def create_world_map(
     events_df: pd.DataFrame, map_type: str = "imposing", debug: bool = False
 ) -> Optional[go.Figure]:
@@ -382,6 +385,7 @@ def create_world_map(
     return fig
 
 
+@st.cache_data
 def create_industry_chart(events_df: pd.DataFrame) -> Optional[go.Figure]:
     """
     Create a bar chart of affected industries.
@@ -430,6 +434,7 @@ def create_industry_chart(events_df: pd.DataFrame) -> Optional[go.Figure]:
     return fig
 
 
+@st.cache_data
 def create_measure_type_pie(events_df: pd.DataFrame) -> Optional[go.Figure]:
     """
     Create a pie chart of measure types.
@@ -479,6 +484,7 @@ def create_product_wordcloud(events_df: pd.DataFrame) -> Optional[plt.Figure]:
     pass
 
 
+@st.cache_data
 def create_tariff_rates_histogram(events_df: pd.DataFrame) -> Optional[go.Figure]:
     """
     Create a histogram of main tariff rates.
@@ -517,6 +523,7 @@ def create_tariff_rates_histogram(events_df: pd.DataFrame) -> Optional[go.Figure
     return fig
 
 
+@st.cache_data
 def create_time_series(
     events_df: pd.DataFrame,
     time_column: str = "announcement_date",
