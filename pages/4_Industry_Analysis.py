@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.data_processing import events_to_dataframe, clean_event_data
 from utils.visualization import create_industry_chart, create_tariff_rates_histogram
+from utils.data_manager import get_session_events_data, initialize_session_data
 
 # Set page configuration
 st.set_page_config(
@@ -50,26 +51,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Initialize data if needed
+if "events_initialized" not in st.session_state:
+    with st.spinner("Loading initial data..."):
+        initialize_session_data()
 
-# Load sample data
-@st.cache_data
-def load_sample_data():
-    file_path = os.path.join("data", "sample_tariff_events.json")
-    try:
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    except FileNotFoundError:
-        st.error(f"Sample data file not found at {file_path}")
-        return {"events": []}
-    except json.JSONDecodeError:
-        st.error("Error parsing the sample data file")
-        return {"events": []}
-
-
-sample_data = load_sample_data()
-events = clean_event_data(sample_data.get("events", []))
-events_df = events_to_dataframe(sample_data.get("events", []))
+# Get the current data from session state
+api_result, events, events_df, stats = get_session_events_data()
 
 # Main content
 st.markdown('<div class="main-header">Industry Analysis</div>', unsafe_allow_html=True)
@@ -251,7 +239,7 @@ if not events_df.empty and "affected_industries" in events_df.columns:
                 f"No detailed event data available for the {selected_industry} industry."
             )
 else:
-    st.warning("No industry data available in the sample dataset.")
+    st.warning("No industry data available in the dataset.")
 
 # Product category analysis
 st.subheader("Product Category Analysis")
@@ -295,7 +283,7 @@ if not events_df.empty and "hs_product_categories" in events_df.columns:
     # Display category data table
     st.dataframe(category_counts, use_container_width=True)
 else:
-    st.info("No HS product category data available in the sample dataset.")
+    st.info("No HS product category data available in the dataset.")
 
 # Footer
 st.markdown("---")

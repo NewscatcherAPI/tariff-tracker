@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.data_processing import events_to_dataframe, clean_event_data
+from utils.data_manager import get_session_events_data, initialize_session_data
 
 # Set page configuration
 st.set_page_config(
@@ -98,22 +99,6 @@ st.markdown(
 )
 
 
-# Load sample data
-@st.cache_data
-def load_sample_data():
-    file_path = os.path.join("data", "sample_tariff_events.json")
-    try:
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    except FileNotFoundError:
-        st.error(f"Sample data file not found at {file_path}")
-        return {"events": []}
-    except json.JSONDecodeError:
-        st.error("Error parsing the sample data file")
-        return {"events": []}
-
-
 # Helper function to extract domain from URL
 def extract_domain(url):
     try:
@@ -127,9 +112,13 @@ def extract_domain(url):
         return "Unknown source"
 
 
-sample_data = load_sample_data()
-events = clean_event_data(sample_data.get("events", []))
-events_df = events_to_dataframe(sample_data.get("events", []))
+# Initialize data if needed
+if "events_initialized" not in st.session_state:
+    with st.spinner("Loading initial data..."):
+        initialize_session_data()
+
+# Get the current data from session state
+api_result, events, events_df, stats = get_session_events_data()
 
 # Main content
 st.markdown('<div class="main-header">Event Explorer</div>', unsafe_allow_html=True)
